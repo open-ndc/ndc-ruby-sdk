@@ -1,0 +1,15 @@
+# Run tests using IATA NDC sample sandbox Kronos
+label: KRO
+
+rest:
+  url: http://kronos.jrtechnologies.com/dondc
+  headers:
+    - Accept: application/xml
+    - Content-Type: application/xml
+    - Wadus-Header: wadus/wadus
+
+options:
+  travelAgency:
+    name: Flyiin
+    agencyID: flyiin-id
+    IATA_Number: '00002004'
