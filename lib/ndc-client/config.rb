@@ -1,22 +1,21 @@
-require 'singleton'
+require 'ostruct'
 
 module NDCClient
-
+  module Config
     extend self
 
-    def parameter(*names)
-      names.each do |name|
-        attr_accessor name
-
-        define_method name do |*values|
-          value = values.first
-          value ? self.send("#{name}=", value) : instance_variable_get("@#{name}")
-        end
-      end
+    def self.ndc_config=(ndc_config)
+      @ndc_config ||= OpenStruct.new
+      @ndc_config = ndc_config.deep_symbolize_keys!
     end
 
-    def config(&block)
-      instance_eval &block
+    def self.ndc_config
+      @ndc_config
     end
 
+    def valid?
+      @ndc_config[:Document] && @ndc_config[:Party]
+    end
+
+  end
 end

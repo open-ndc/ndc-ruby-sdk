@@ -1,13 +1,13 @@
 module NDCClient
 
+  ACCEPTABLE_NDC_METHODS = [:AirShopping, :FlightPrice, :SeatAvailability, :ServiceList, :ServicePrice, :OrderCreate, :OrderList, :OrderView, :OrderCancel, :ItinReshop]
+
   class Base
-    # attr_accessor :endpoint, :wsdl, :status, :errors
-    ATTRIB_CONVERTER = lambda {|key, value| [key, value]}
 
     def initialize(config = {})
       @label = config["label"]
       if config.is_a?(Hash) && config["rest"]
-        @options = config["options"]
+        Config.ndc_config = config["ndc"]
         @rest_config = config["rest"]
         RestClient.log = Logger.new("./log/ndc-#{@label.downcase}.log")
         @client = RestClient::Resource.new @rest_config['url'], @rest_config
@@ -19,27 +19,26 @@ module NDCClient
       @status == :initialized
     end
 
+    def valid_config?
+      Config.valid?
+    end
+
     def request(method, params)
-      case method
-      when :AirShopping
-        payload_message = Messages::AirShoppingRQ.new(params, @options)
-        response = rest_call_with_message(method, payload_message)
-        if valid_response?
-          if parse_response!
-            # binding.pry
-            if @parsed_response["AirShoppingRS"]
-              return @parsed_response
-            else
-              raise NDCErrors::NDCInvalidResponseFormat, "Expecting an AirShoppingRS Document"
-            end
-          else
-            raise NDCErrors::NDCParseError, "Expecting an AirShoppingRS Document"
-          end
+      raise NDCErrors::NDCUnsupportedMethod unless ACCEPTABLE_NDC_METHODS.include?(method)
+      @method = method
+      @request_name = method.to_s << 'RQ'
+      @response_name = method.to_s << 'RS'
+      payload_message = Messages.class_eval(@request_name).new(params)
+      response = rest_call_with_message(method, payload_message)
+
+      if @status == :status_ok
+        if parse_response! && @parsed_response[@response_name] && @parsed_response[@response_name]["Errors"].nil?
+          return @parsed_response
         else
-          raise NDCErrors::NDCInvalidServerResponse, "Expecting HTTP StatusOK"
+          raise NDCErrors::NDCInvalidResponseFormat, "Expecting a valid #{@response_name}. Errors: #{@parsed_response[@response_name]["Errors"]}"
         end
       else
-        raise NDCErrors::NDCUnknownMethod, "Method #{method} is unknown."
+        raise NDCErrors::NDCInvalidServerResponse, "Expecting HTTP Status OK"
       end
     end
 
@@ -56,7 +55,7 @@ module NDCClient
     end
 
     def valid_response?
-      @response.code == 200
+      @status == :status_ok && @parsed_response["Errors"].nil?
     end
 
     private
@@ -67,9 +66,11 @@ module NDCClient
         @status = :request_sent
         @response = @client.post message.to_xml, {'Content-Type' => 'application/xml', 'Accept' => 'application/xml', 'User-Agent' => 'NDC Ruby SDK V0.x'}
         @status = :status_ok if @response.code == 200
+        return @response
       rescue RestClient::ExceptionWithResponse => error
         @status = :request_error
         @error = error
+        return @error
       end
     end
 

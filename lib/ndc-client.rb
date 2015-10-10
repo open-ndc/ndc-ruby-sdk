@@ -24,6 +24,7 @@ require_relative "ndc-client/errors"
 require_relative "ndc-client/base"
 require_relative "ndc-client/config"
 
+require_relative "ndc-client/messages/base"
 messages_path = "#{File.dirname(__FILE__)}/ndc-client/messages/*.rb"
 Dir[messages_path].each {|file|
   require file
