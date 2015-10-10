@@ -21,14 +21,52 @@ Then `bundle`
  
 YAML config:
 
-    provider:
-        iata-code: AA
-        label: American Airlines
-    options:
-        travelAgency:
-        name: Flyiin
-        agencyID: test agent
-        IATA_Number: '0000XXXX'
+```
+label: KRO
+
+rest:
+  url: http://kronos.ndc.developer.iata.org/ndc/api
+  headers:
+    - Accept: application/xml
+    - Content-Type: application/xml
+
+ndc:
+  Document:
+    Name: NDC Wrapper
+    ReferenceVersion: "1.0"
+  Party:
+    Sender:
+      ORA_Sender:
+        AirlineID: C9
+        Name: Kronos Air
+        AgentUser:
+          Name: TravelWadus
+          Type: TravelManagementCompany
+          PseudoCity: A4A
+          AgentUserID: travelwadus
+          IATA_Number: "00000001"
+  Participants:
+    Participant:
+      AggregatorParticipant:
+        Name: Wadus NDC Gateway
+        AggregatorID: WAD-00000
+  Parameters:
+    CurrCodes:
+      CurrCode: EUR
+  Preference:
+    AirlinePreferences:
+      Airline:
+        AirlineID: C9
+    FarePreferences:
+      FarePreferences:
+        Types:
+          Type:
+            Code: '759'
+    CabinPreferences:
+      CabinType:
+        Code: M
+        Definition: Economy/coach discounted
+```
 
 Request example
 
