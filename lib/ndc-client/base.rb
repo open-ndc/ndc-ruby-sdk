@@ -1,6 +1,17 @@
 module NDCClient
 
-  ACCEPTABLE_NDC_METHODS = [:AirShopping, :FlightPrice, :SeatAvailability, :ServiceList, :ServicePrice, :OrderCreate, :OrderList, :OrderView, :OrderCancel, :ItinReshop]
+  ACCEPTABLE_NDC_METHODS = {
+                              AirShopping: [:AirShoppingRQ, :AirShoppingRS],
+                              FlightPrice: [:FlightPriceRQ, :FlightPriceRS],
+                              SeatAvailability: [:SeatAvailabilityRQ, :SeatAvailabilityRS],
+                              ServiceList: [:ServiceListRQ, :ServiceListRS],
+                              ServicePrice: [:ServicePriceRQ, :ServicePriceRS],
+
+                              OrderCreate: [:OrderCreateRQ, :OrderViewRS],
+                              OrderList: [:OrderListRQ, :OrderListRS],
+                              OrderRetrieve: [:OrderRetrieveRQ, :OrderViewRS],
+                              OrderCancel: [:OrderCancelRQ, :OrderCancelRS]
+                            }
 
   class Base
 
@@ -24,10 +35,10 @@ module NDCClient
     end
 
     def request(method, params)
-      raise NDCErrors::NDCUnsupportedMethod unless ACCEPTABLE_NDC_METHODS.include?(method)
+      raise NDCErrors::NDCUnsupportedMethod unless ACCEPTABLE_NDC_METHODS[method].present?
       @method = method
-      @request_name = method.to_s << 'RQ'
-      @response_name = method.to_s << 'RS'
+      @request_name = ACCEPTABLE_NDC_METHODS[method].first.to_s
+      @response_name = ACCEPTABLE_NDC_METHODS[method].last.to_s
       payload_message = Messages.class_eval(@request_name).new(params)
       response = rest_call_with_message(method, payload_message)
 
