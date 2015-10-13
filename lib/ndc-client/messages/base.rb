@@ -3,7 +3,7 @@ module NDCClient
     class Base
 
       NDC_CONFIG_BLOCKS = [:Document, :Party, :Participants, :Preference, :Parameters, :Metadata]
-      NDC_PARAMS_BLOCKS = [:CoreQuery, :Query, :Travelers, :PointOfSale, :Preference, :Parameters, :Datalists]
+      NDC_PARAMS_BLOCKS = [:CoreQuery, :Query, :Travelers, :PointOfSale, :Preference, :Parameters, :DataLists]
 
       def initialize(params)
         @method = self.class.to_s.split('::').last
@@ -134,14 +134,16 @@ module NDCClient
               }
             }
 
-            xml.DataLists {
-              xml.OriginDestinationList {
-                xml.OriginDestination {
-                    xml.DepartureCode_ "ARN"
-                    xml.ArrivalCode_ "RIX"
+            if data.hpath('DataLists').present?
+              xml.DataLists {
+                xml.OriginDestinationList {
+                  xml.OriginDestination {
+                      xml.DepartureCode_ data.hpath('DataLists/OriginDestinationList/OriginDestination/DepartureCode')
+                      xml.ArrivalCode_ data.hpath('DataLists/OriginDestinationList/OriginDestination/ArrivalCode')
+                  }
                 }
               }
-            }
+            end
           }
 
         }
