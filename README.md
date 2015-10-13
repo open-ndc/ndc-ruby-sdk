@@ -1,34 +1,37 @@
 # NDC Ruby SDK
 
 This is a Ruby gem that wrapps any NDC-compliant API.
-It's host-agnostic and somehow flexible-through-configuration so that it can point any NDC host and using several routig/wrapping level protocols, such as SOAP or REST. 
+It's host-agnostic and quite flexible-through-configuration so that it can point any NDC host and using several routig/wrapping level protocols, such as SOAP or REST.
 
 ## Installation
 
 Add this to your Gemfile:
 
-    gem "ndc-client", :git => 'https://github.com/flyiin/ndc-ruby-sdk'
+    gem "ndc-client", :git => 'https://github.com/iata-ndc/ndc-ruby-sdk'
 
 Then `bundle`
 
 ## Usage
 
-1. Require the library
+Get a valid developer key at [IATA NDC Developer Portal](http://ndc.developer.iata.org/).
+
+1. Require the library somewhere in your loading files
 
     `require 'ndc-client'`
 
 2. Create a client instance using a valid NDC config
- 
+
 YAML config:
 
 ```
 label: KRO
 
 rest:
-  url: http://kronos.ndc.developer.iata.org/ndc/api
+  url: http://iata.api.mashery.com/kronos/api
   headers:
     - Accept: application/xml
     - Content-Type: application/xml
+    - Authorization-Key: xxxxxxxxxxxxxxxxx
 
 ndc:
   Document:
@@ -40,7 +43,7 @@ ndc:
         AirlineID: C9
         Name: Kronos Air
         AgentUser:
-          Name: TravelWadus
+          Name: Travel Wadus
           Type: TravelManagementCompany
           PseudoCity: A4A
           AgentUserID: travelwadus
@@ -73,7 +76,7 @@ Request example
 ```
 config = YAML.load('config/ndc.yml')
 ndc_client = NDCClient::Base.new(config)
-query_params = {departure_airport_code: 'JFK', arrival_airport_code: 'LHR', departure_date: '2015-09-01'} 
+query_params = {departure_airport_code: 'JFK', arrival_airport_code: 'LHR', departure_date: '2015-09-01'}
 ndc_response = ndc_client.request(:AirShopping, query_params)
 ```
 
