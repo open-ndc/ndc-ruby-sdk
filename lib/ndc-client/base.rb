@@ -75,7 +75,7 @@ module NDCClient
       @method = method
       begin
         @status = :request_sent
-        @response = @client.post message.to_xml, {'Content-Type' => 'application/xml', 'Accept' => 'application/xml', 'User-Agent' => 'NDC Ruby SDK V0.x'}
+        @response = @client.post message.to_xml, {'Content-Type' => 'application/xml', 'Accept' => 'application/xml', 'User-Agent' => 'NDC Ruby SDK V0.1'}
         @status = :status_ok if @response.code == 200
         return @response
       rescue RestClient::ExceptionWithResponse => error
