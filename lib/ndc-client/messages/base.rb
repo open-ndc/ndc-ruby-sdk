@@ -3,9 +3,10 @@ module NDCClient
     class Base
 
       NDC_CONFIG_BLOCKS = [:Document, :Party, :Participants, :Preference, :Parameters, :Metadata]
-      NDC_PARAMS_BLOCKS = [:CoreQuery, :Travelers, :PointOfSale, :Preference, :Parameters]
+      NDC_PARAMS_BLOCKS = [:CoreQuery, :Query, :Travelers, :PointOfSale, :Preference, :Parameters, :Datalists]
 
       def initialize(params)
+        @method = self.class.to_s.split('::').last
         @timestamp = Time.now.utc.iso8601
         @token = Digest::SHA1.hexdigest @timestamp
         @version = '1.1.5'
@@ -14,7 +15,6 @@ module NDCClient
         @namespaces = {
           'xmlns': "http://www.iata.org/IATA/EDIST",
           'xmlns:xsi': "http://www.w3.org/2001/XMLSchema-instance",
-          'xsi:schemaLocation': "http://www.iata.org/IATA/EDIST ../AirShoppingRQ.xsd",
           'EchoToken': @token,
           'TimeStamp': @timestamp,
           'Version': @version,
@@ -32,13 +32,14 @@ module NDCClient
       def build_message
         data = @data
         namespaces = @namespaces
+        method = @method
 
         @message = Nokogiri::XML::Builder.new {|xml|
 
-          xml.AirShoppingRQ(namespaces) {
+          xml.send(method, namespaces) {
 
             xml.Document {
-              xml.Name_ "NDC AirShoppingRQ Message"
+              xml.Name_ "NDC Message"
               xml.MessageVersion_ "1.1.5"
               xml.ReferenceVersion_ "1.0"
             }
@@ -129,6 +130,15 @@ module NDCClient
                       xml.Code_ISO_ "en"
                     }
                   }
+                }
+              }
+            }
+
+            xml.DataLists {
+              xml.OriginDestinationList {
+                xml.OriginDestination {
+                    xml.DepartureCode_ "ARN"
+                    xml.ArrivalCode_ "RIX"
                 }
               }
             }

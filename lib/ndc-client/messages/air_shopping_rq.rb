@@ -4,7 +4,7 @@ module NDCClient
     class AirShoppingRQ < Messages::Base
 
       def initialize(params = {})
-        super (params)
+        super(params)
       end
 
       def yield_core_query(data, xml)
