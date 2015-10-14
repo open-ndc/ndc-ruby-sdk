@@ -71,26 +71,27 @@ module NDCClient
                 }
               }
             }
-
-            xml.PointOfSale {
-              xml.Location {
-                xml.CountryCode_ data.hpath('PointOfSale/Location/CountryCode')
-                xml.CityCode_ data.hpath('PointOfSale/Location/CityCode')
-              }
-              xml.RequestTime(Zone: data.hpath('PointOfSale/RequestTime/Zone')).text data.hpath('PointOfSale/RequestTime')
-              xml.TouchPoint {
-                xml.Device {
-                  xml.Code_ data.hpath('PointOfSale/TouchPoint/Device/Code')
-                  xml.Definition_ data.hpath('PointOfSale/TouchPoint/Device/Definition')
-                  xml.Position {
-                    xml.Latitude_ data.hpath('PointOfSale/TouchPoint/Position/Latitude')
-                    xml.Longitude_ data.hpath('PointOfSale/TouchPoint/Position/Longitude')
-                    xml.NAC_ data.hpath('PointOfSale/TouchPoint/Position/NAC')
-                  }
+            if data.hpath('PointOfSale').present?
+              xml.PointOfSale {
+                xml.Location {
+                  xml.CountryCode_ data.hpath('PointOfSale/Location/CountryCode')
+                  xml.CityCode_ data.hpath('PointOfSale/Location/CityCode')
                 }
-                xml.Event data.hpath('PointOfSale/TouchPoint/Event')
+                xml.RequestTime(Zone: data.hpath('PointOfSale/RequestTime/Zone')) { xml.text data.hpath('PointOfSale/RequestTime') }
+                xml.TouchPoint {
+                  xml.Device {
+                    xml.Code_ data.hpath('PointOfSale/TouchPoint/Device/Code')
+                    xml.Definition_ data.hpath('PointOfSale/TouchPoint/Device/Definition')
+                    xml.Position {
+                      xml.Latitude_ data.hpath('PointOfSale/TouchPoint/Position/Latitude')
+                      xml.Longitude_ data.hpath('PointOfSale/TouchPoint/Position/Longitude')
+                      xml.NAC_ data.hpath('PointOfSale/TouchPoint/Position/NAC')
+                    }
+                  }
+                  xml.Event data.hpath('PointOfSale/TouchPoint/Event')
+                }
               }
-            }
+            end
 
             # Missing Preferences Block - TEMPORARY FIX FOR JRT!
             xml.Preference {
@@ -136,10 +137,14 @@ module NDCClient
 
             if data.hpath('DataLists').present?
               xml.DataLists {
-                xml.OriginDestinationList {
-                  xml.OriginDestination {
-                      xml.DepartureCode_ data.hpath('DataLists/OriginDestinationList/OriginDestination/DepartureCode')
-                      xml.ArrivalCode_ data.hpath('DataLists/OriginDestinationList/OriginDestination/ArrivalCode')
+                if data.hpath('DataLists/OriginDestinationList').present?
+                  xml.OriginDestinationList {
+                    if data.hpath('DataLists/OriginDestinationList/OriginDestination').present?
+                      xml.OriginDestination( OriginDestinationKey: data.hpath('DataLists/OriginDestinationList/OriginDestination/_OriginDestinationKey')) {
+                          xml.DepartureCode_ data.hpath('DataLists/OriginDestinationList/OriginDestination/DepartureCode')
+                          xml.ArrivalCode_ data.hpath('DataLists/OriginDestinationList/OriginDestination/ArrivalCode')
+                      }
+                    end
                   }
                 }
               }
