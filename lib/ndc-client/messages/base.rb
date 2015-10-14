@@ -62,6 +62,7 @@ module NDCClient
               }
             }
 
+            # Inserts core query data taken from the subclass
             yield_core_query(data, xml)
 
             xml.Travelers {
