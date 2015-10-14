@@ -153,6 +153,10 @@ class NDCFlightPriceTest < Test::Unit::TestCase
       assert @@ndc_client.valid_response?
     end
 
+    test "Response includes Success element" do
+      refute_nil @@ndc_response["FlightPriceRS"].has_key?("Success")
+    end
+
     test "Document version is ok" do
       refute_empty @@ndc_response.hpath('FlightPriceRS/Document')
       assert_equal @@ndc_response.hpath('FlightPriceRS/Document/ReferenceVersion'), "1.0"
