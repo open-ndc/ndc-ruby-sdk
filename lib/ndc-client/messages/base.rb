@@ -3,7 +3,7 @@ module NDCClient
     class Base
 
       NDC_CONFIG_BLOCKS = [:Document, :Party, :Participants, :Preference, :Parameters, :Metadata]
-      NDC_PARAMS_BLOCKS = [:CoreQuery, :Query, :Travelers, :PointOfSale, :Preference, :Parameters, :DataLists]
+      NDC_PARAMS_BLOCKS = [:CoreQuery, :Query, :ShoppingResponseID, :Travelers, :PointOfSale, :Preference, :Parameters, :DataLists]
 
       def initialize(params)
         @method = self.class.to_s.split('::').last
