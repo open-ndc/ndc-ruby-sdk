@@ -147,7 +147,73 @@ module NDCClient
                       }
                     end
                   }
-                }
+                end
+                if data.hpath('DataLists/FlightSegmentList').present?
+                  xml.FlightSegmentList {
+                    data.hpath('DataLists/FlightSegmentList').each { |fs|
+                      flight_segment = fs[:FlightSegment]
+                      xml.FlightSegment(SegmentKey: flight_segment.hpath('_SegmentKey')) {
+                        xml.Departure {
+                          xml.AirportCode_ flight_segment.hpath('Departure/AirportCode')
+                          xml.Date_ flight_segment.hpath('Departure/Date')
+                          xml.Time_ flight_segment.hpath('Departure/Time')
+                          xml.AirportName_ flight_segment.hpath('Departure/AirportName')
+                        }
+                        xml.Arrival {
+                          xml.AirportCode_ flight_segment.hpath('Arrival/AirportCode')
+                          xml.Date_ flight_segment.hpath('Arrival/Date')
+                          xml.Time_ flight_segment.hpath('Arrival/Time')
+                          xml.AirportName_ flight_segment.hpath('Arrival/AirportName')
+                        }
+                        if flight_segment.hpath('MarketingCarrier')
+                          xml.MarketingCarrier {
+                            xml.AirlineID_ flight_segment.hpath('MarketingCarrier/AirlineID')
+                            xml.Name_ flight_segment.hpath('MarketingCarrier/Name')
+                            xml.FlightNumber_ flight_segment.hpath('MarketingCarrier/FlightNumber')
+                          }
+                        end
+                        if flight_segment.hpath('OperatingCarrier')
+                          xml.OperatingCarrier {
+                            xml.AirlineID_ flight_segment.hpath('OperatingCarrier/AirlineID')
+                            xml.Name_ flight_segment.hpath('OperatingCarrier/Name')
+                            xml.FlightNumber_ flight_segment.hpath('OperatingCarrier/FlightNumber')
+                          }
+                        end
+                        if flight_segment.hpath('Equipment')
+                          xml.Equipment {
+                            xml.AircraftCode_ flight_segment.hpath('Equipment/AircraftCode')
+                            xml.Name_ flight_segment.hpath('Equipment/Name')
+                          }
+                        end
+                        if flight_segment.hpath('CabinType')
+                          xml.CabinType {
+                            xml.Code_ flight_segment.hpath('CabinType/Code')
+                            xml.Definition_ flight_segment.hpath('CabinType/Definition')
+                          }
+                        end
+                        if flight_segment.hpath('ClassOfService')
+                          xml.ClassOfService {
+                            xml.Code_ flight_segment.hpath('ClassOfService/Code')
+                          }
+                        end
+                      }
+                    }
+                  }
+                end
+
+                if data.hpath('DataLists/FlightList').present?
+                  xml.FlightList {
+                    data.hpath('DataLists/FlightList').each { |fl|
+                      flight = fl[:Flight]
+                      xml.Flight(FlightKey: flight.hpath('_FlightKey')) {
+                        xml.Journey {
+                          xml.Time_ flight.hpath('Journey/Time')
+                        }
+                      }
+                    }
+                  }
+                end
+
               }
             end
           }
