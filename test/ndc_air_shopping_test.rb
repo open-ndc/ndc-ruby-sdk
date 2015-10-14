@@ -3,6 +3,23 @@ require 'test_helper'
 class NDCAirShoppingTest < Test::Unit::TestCase
   extend Minitest::Spec::DSL
 
+  VALID_REQUEST_PARAMS = {
+      CoreQuery: {
+        OriginDestinations: {
+          OriginDestination: {
+            Departure: {
+              AirportCode: 'MUC',
+              Date: '2016-04-01'
+            },
+            Arrival: {
+              AirportCode: 'LHR'
+            }
+          }
+        }
+      }
+    }
+
+
   describe "Sends an invalid AirShopping request" do
 
     ndc_config = YAML.load_file('test/config/ndc-iata-kronos.yml')
@@ -58,23 +75,7 @@ class NDCAirShoppingTest < Test::Unit::TestCase
     ndc_config = YAML.load_file('test/config/ndc-iata-kronos.yml')
     @@ndc_client = NDCClient::Base.new(ndc_config)
 
-    query_params = {
-      CoreQuery: {
-        OriginDestinations: {
-          OriginDestination: {
-            Departure: {
-              AirportCode: 'MUC',
-              Date: '2016-04-01'
-            },
-            Arrival: {
-              AirportCode: 'LHR'
-            }
-          }
-        }
-      }
-    }
-
-    @@ndc_response = @@ndc_client.request(:AirShopping, query_params)
+    @@ndc_response = @@ndc_client.request(:AirShopping, VALID_REQUEST_PARAMS)
 
 
     test "AirShopping request is valid" do
