@@ -67,7 +67,7 @@ module NDCClient
             xml.Travelers {
               xml.Traveler {
                 xml.AnonymousTraveler {
-                  xml.PTC(Quantity: 1).text "ADT"
+                  xml.PTC(Quantity: 1) { xml.text "ADT" }
                 }
               }
             }
