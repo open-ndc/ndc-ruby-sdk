@@ -14,7 +14,7 @@ class NDCSeatAvailabilityTest < Test::Unit::TestCase
           OriginDestinationReferences: 'OD1'
         }
       },
-      DataLists: {
+      DataList: {
         OriginDestinationList: {
           OriginDestination: {
             _OriginDestinationKey: 'OD1',

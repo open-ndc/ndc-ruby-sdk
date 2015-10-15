@@ -84,6 +84,25 @@ module NDCClient
         }
       end
 
+      def yield_datalist(data, xml)
+        if data.hpath('DataLists').present?
+          xml.DataLists {
+            if data.hpath('DataLists/OriginDestinationList').present?
+              xml.OriginDestinationList {
+                if data.hpath('DataLists/OriginDestinationList/OriginDestination').present?
+                  xml.OriginDestination( (data.hpath('DataLists/OriginDestinationList/OriginDestination/_OriginDestinationKey').present? ? {OriginDestinationKey: data.hpath('DataLists/OriginDestinationList/OriginDestination/_OriginDestinationKey')} : nil ) ) {
+                      xml.DepartureCode_ data.hpath('DataLists/OriginDestinationList/OriginDestination/DepartureCode')
+                      xml.ArrivalCode_ data.hpath('DataLists/OriginDestinationList/OriginDestination/ArrivalCode')
+                  }
+                end
+              }
+            end
+          }
+        else
+          puts "DEBUG ::: SKIPPING DATALIST -> #{data.hpath('DataList')}"
+        end
+      end
+
     end
 
   end
