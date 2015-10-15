@@ -145,7 +145,7 @@ module NDCClient
                   if data.hpath('DataList/OriginDestinationList').present?
                     xml.OriginDestinationList {
                       if data.hpath('DataList/OriginDestinationList/OriginDestination').present?
-                        xml.OriginDestination( (data.hpath('DataList/OriginDestinationList/OriginDestination/_OriginDestinationKey').present? ? {OriginDestinationKey: data.hpath('DataList/OriginDestinationList/OriginDestination/_OriginDestinationKey')} : nil ) ) {
+                        xml.OriginDestination((data.hpath('DataList/OriginDestinationList/OriginDestination/_OriginDestinationKey').present? ? {OriginDestinationKey: data.hpath('DataList/OriginDestinationList/OriginDestination/_OriginDestinationKey')} : nil )) {
                             xml.DepartureCode_ data.hpath('DataList/OriginDestinationList/OriginDestination/DepartureCode')
                             xml.ArrivalCode_ data.hpath('DataList/OriginDestinationList/OriginDestination/ArrivalCode')
                         }
