@@ -91,9 +91,9 @@ class NDCAirShoppingTest < Test::Unit::TestCase
       assert_equal @@ndc_response.hpath('AirShoppingRS/Document/ReferenceVersion'), "1.0"
     end
 
-    test "ShoppingResponseID is ok" do
-      refute_empty @@ndc_response.hpath('AirShoppingRS/ShoppingResponseID')
-      refute_empty @@ndc_response.hpath('AirShoppingRS/ShoppingResponseID/ResponseID')
+    test "ShoppingResponseIDs is ok" do
+      refute_empty @@ndc_response.hpath('AirShoppingRS/ShoppingResponseIDs')
+      refute_empty @@ndc_response.hpath('AirShoppingRS/ShoppingResponseIDs/ResponseID')
     end
 
     test "Airline Offer is present" do

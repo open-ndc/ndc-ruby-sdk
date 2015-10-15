@@ -9,10 +9,10 @@ class NDCServicePriceTest < Test::Unit::TestCase
     @@ndc_client = NDCClient::Base.new(ndc_config)
 
     @@ndc_response = @@ndc_client.request(:AirShopping, NDCAirShoppingTest::VALID_REQUEST_PARAMS)
-    @response_id = @@ndc_response.hpath('AirShoppingRS/ShoppingResponseID/ResponseID')
+    @response_id = @@ndc_response.hpath('AirShoppingRS/ShoppingResponseIDs/ResponseID')
 
     query_params = {
-      ShoppingResponseID: {
+      ShoppingResponseIDs: {
         ResponseID: @response_id
       }
     }

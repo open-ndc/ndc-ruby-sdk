@@ -8,8 +8,8 @@ module NDCClient
       end
 
       def yield_core_query(data, xml)
-        xml.ShoppingResponseID {
-          xml.ResponseID_ data.hpath('ShoppingResponseID/ResponseID')
+        xml.ShoppingResponseIDs {
+          xml.ResponseID_ data.hpath('ShoppingResponseIDs/ResponseID')
         }
       end
 

@@ -162,9 +162,9 @@ class NDCFlightPriceTest < Test::Unit::TestCase
       assert_equal @@ndc_response.hpath('FlightPriceRS/Document/ReferenceVersion'), "1.0"
     end
 
-    test "ShoppingResponseID is ok" do
-      refute_empty @@ndc_response.hpath('FlightPriceRS/ShoppingResponseID')
-      refute_empty @@ndc_response.hpath('FlightPriceRS/ShoppingResponseID/ResponseID')
+    test "ShoppingResponseIDs is ok" do
+      refute_empty @@ndc_response.hpath('FlightPriceRS/ShoppingResponseIDs')
+      refute_empty @@ndc_response.hpath('FlightPriceRS/ShoppingResponseIDs/ResponseID')
     end
 
   end
