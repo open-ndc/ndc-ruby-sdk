@@ -8,7 +8,6 @@ module NDCClient
       end
 
       def yield_core_query(data, xml)
-        puts "DEBUG :: YIELDS ORDER CREATE"
         xml.Query {
           if data.hpath('Passengers').present?
             xml.Passengers {
