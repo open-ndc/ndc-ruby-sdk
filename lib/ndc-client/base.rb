@@ -13,6 +13,8 @@ module NDCClient
                               OrderCancel: [:OrderCancelRQ, :OrderCancelRS]
                             }
 
+  DEFAULT_HEADERS = {'Content-Type' => 'application/xml', 'Accept' => 'application/xml', 'User-Agent' => 'NDC Ruby SDK V0.1'}
+
   class Base
 
     def initialize(config = {})
@@ -43,13 +45,14 @@ module NDCClient
       response = rest_call_with_message(method, payload_message)
 
       if @status == :status_ok
-        if parse_response! && @parsed_response[@response_name] && @parsed_response[@response_name]["Errors"].nil?
+        parse_response!
+        if @parsed_response[@response_name] && @parsed_response[@response_name]["Errors"].nil?
           return @parsed_response
         else
-          raise NDCErrors::NDCInvalidResponseFormat, "Expecting a valid #{@response_name}. Errors: #{@parsed_response[@response_name]["Errors"]}"
+          raise NDCErrors::NDCInvalidResponseFormat, "Expecting a valid #{@response_name}. Errors: #{@parsed_response[@response_name]["Errors"] if !@parsed_response[@response_name]["Errors"].nil?}"
         end
       else
-        raise NDCErrors::NDCInvalidServerResponse, "Expecting HTTP Status OK"
+        raise NDCErrors::NDCInvalidServerResponse, "Expecting HTTP Status OK but retuned: #{@status_code}"
       end
     end
 
@@ -75,7 +78,8 @@ module NDCClient
       @method = method
       begin
         @status = :request_sent
-        @response = @client.post message.to_xml, {'Content-Type' => 'application/xml', 'Accept' => 'application/xml', 'User-Agent' => 'NDC Ruby SDK V0.1'}
+        @response = @client.post message.to_xml, DEFAULT_HEADERS.merge({'Authorization-Key': @rest_config['headers']['Authorization-Key']})
+        @status_code = @response.code
         @status = :status_ok if @response.code == 200
         return @response
       rescue RestClient::ExceptionWithResponse => error
