@@ -2,10 +2,11 @@
 label: KRO
 
 rest:
-  url: http://kronos.jrtechnologies.com/dondc
+  url: http://iata.api.mashery.com/kronos/api
   headers:
-    - Accept: application/xml
-    - Content-Type: application/xml
+    Accept: application/xml
+    Content-Type: application/xml
+    Authorization-Key: vsh6he647b35smp9b3ekg7yh
 
 ndc:
   Document:
