@@ -29,9 +29,9 @@ label: KRO
 rest:
   url: http://iata.api.mashery.com/kronos/api
   headers:
-    - Accept: application/xml
-    - Content-Type: application/xml
-    - Authorization-Key: xxxxxxxxxxxxxxxxx
+    Accept: application/xml
+    Content-Type: application/xml
+    Authorization-Key: xxxxxxxxxxxxxxxxx
 
 ndc:
   Document:
