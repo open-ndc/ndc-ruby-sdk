@@ -98,8 +98,6 @@ module NDCClient
               }
             end
           }
-        else
-          puts "DEBUG ::: SKIPPING DATALIST -> #{data.hpath('DataList')}"
         end
       end
 
