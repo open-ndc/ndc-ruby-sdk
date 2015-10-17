@@ -74,7 +74,7 @@ ndc:
 Request example
 
 ```
-config = YAML.load('config/ndc.yml')
+config = YAML.load_file('config/ndc.yml')
 ndc_client = NDCClient::Base.new(config)
 query_params = {departure_airport_code: 'JFK', arrival_airport_code: 'LHR', departure_date: '2015-09-01'}
 ndc_response = ndc_client.request(:AirShopping, query_params)
