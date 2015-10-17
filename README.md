@@ -74,9 +74,24 @@ ndc:
 Request example
 
 ```
-config = YAML.load_file('config/ndc.yml')
+config = YAML.load_file(File.parse('config/ndc.yml'))
 ndc_client = NDCClient::Base.new(config)
-query_params = {departure_airport_code: 'JFK', arrival_airport_code: 'LHR', departure_date: '2015-09-01'}
+query_params = {
+    CoreQuery: {
+        OriginDestinations: {
+          OriginDestination: {
+            Departure: {
+              AirportCode: 'MUC',
+              Date: '2016-04-01'
+            },
+            Arrival: {
+              AirportCode: 'LHR'
+            }
+          }
+        }
+      }
+    }
+}
 ndc_response = ndc_client.request(:AirShopping, query_params)
 ```
 
