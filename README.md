@@ -74,7 +74,7 @@ ndc:
 Request example
 
 ```
-config = YAML.load_file(File.parse('config/ndc.yml'))
+config = YAML.load_file('config/ndc.yml')
 ndc_client = NDCClient::Base.new(config)
 query_params = {
     CoreQuery: {
