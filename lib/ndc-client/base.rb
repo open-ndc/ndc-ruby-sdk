@@ -43,13 +43,13 @@ module NDCClient
       @response_name = ACCEPTABLE_NDC_METHODS[method].last.to_s
       payload_message = Messages.class_eval(@request_name).new(params)
       response = rest_call_with_message(method, payload_message)
-
       if @status == :status_ok
         parse_response!
-        if @parsed_response[@response_name] && @parsed_response[@response_name]["Errors"].nil?
+        if @parsed_response.hpath(@response_name).present? && @parsed_response.hpath("#{@response_name}/Errors").nil?
           return @parsed_response
         else
-          raise NDCErrors::NDCInvalidResponseFormat, "Expecting a valid #{@response_name}. Errors: #{@parsed_response[@response_name]["Errors"] if !@parsed_response[@response_name]["Errors"].nil?}"
+          binding.pry
+          raise NDCErrors::NDCInvalidResponseFormat, "Expecting a valid #{@response_name}. Errors: #{@parsed_response.hpath("#{@response_name}/Errors")}"
         end
       else
         raise NDCErrors::NDCInvalidServerResponse, "Expecting HTTP Status OK but retuned: #{@status_code}"
@@ -78,7 +78,7 @@ module NDCClient
       @method = method
       begin
         @status = :request_sent
-        @response = @client.post message.to_xml, DEFAULT_HEADERS.merge({'Authorization-Key': @rest_config['headers']['Authorization-Key']})
+        @response = @client.post message.to_xml, DEFAULT_HEADERS.merge({'Authorization-Key' => @rest_config['headers']['Authorization-Key']})
         @status_code = @response.code
         @status = :status_ok if @response.code == 200
         return @response
