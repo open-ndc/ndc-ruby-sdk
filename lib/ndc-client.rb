@@ -5,7 +5,6 @@ require "digest/sha1"
 require "logger"
 require "rest-client"
 
-# require 'net-http-spy'
 # Net::HTTP.http_logger_options = {:body => true}
 # Net::HTTP.http_logger_options = {:verbose => true}
 

@@ -13,12 +13,12 @@ module NDCClient
         @transaction_identifier = 'TR-00000'
 
         @namespaces = {
-          'xmlns': "http://www.iata.org/IATA/EDIST",
-          'xmlns:xsi': "http://www.w3.org/2001/XMLSchema-instance",
-          'EchoToken': @token,
-          'TimeStamp': @timestamp,
-          'Version': @version,
-          'TransactionIdentifier': @transaction_identifier
+          'xmlns' => "http://www.iata.org/IATA/EDIST",
+          'xmlns:xsi' => "http://www.w3.org/2001/XMLSchema-instance",
+          'EchoToken' => @token,
+          'TimeStamp' => @timestamp,
+          'Version' => @version,
+          'TransactionIdentifier' => @transaction_identifier
         }
 
         # Config & params merge params (config << params)
