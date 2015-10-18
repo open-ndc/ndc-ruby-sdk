@@ -3,6 +3,12 @@
 This is a Ruby gem that wrapps any NDC-compliant API.
 It's host-agnostic and quite flexible-through-configuration so that it can point any NDC host and using several routig/wrapping level protocols, such as SOAP or REST.
 
+## Compatibility
+
+This SDK was tested to work on:
+- Ruby MRI 2.0+
+- JRuby 1.7.19+
+
 ## Installation
 
 Add this to your Gemfile:
