@@ -48,7 +48,6 @@ module NDCClient
         if @parsed_response.hpath(@response_name).present? && @parsed_response.hpath("#{@response_name}/Errors").nil?
           return @parsed_response
         else
-          binding.pry
           raise NDCErrors::NDCInvalidResponseFormat, "Expecting a valid #{@response_name}. Errors: #{@parsed_response.hpath("#{@response_name}/Errors")}"
         end
       else
