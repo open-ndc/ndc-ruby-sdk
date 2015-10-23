@@ -33,20 +33,24 @@ class NDCOrderCreateTest < Test::Unit::TestCase
                 Middle: "Middle"
               },
               ProfileID: "123",
-              Contacts: {
-                Contact: [
-                  {
+              Contacts: [
+                {
+                  Contact: {
                     EmailContact: {
                       Address: "mithalesh@jrtechnologies.com"
                     }
-                  },
-                  {
+                  }
+                },
+                {
+                  Contact: {
                     PhoneContact: {
                       Application: "Emergency",
                       Number: "9867236088"
                     }
-                  },
-                  {
+                  }
+                },
+                {
+                  Contact: {
                     AddressContact: {
                       Application: "AddressAtOrigin",
                       Street: "22 Main Street",
@@ -57,8 +61,9 @@ class NDCOrderCreateTest < Test::Unit::TestCase
                       CountryCode: "DE"
                     }
                   }
-                ]
-              },
+                }
+              ],
+              # },
               FQTVs: {
                 FQTV_ProgramCore: {
                   FQTV_ProgramID: "kR",
@@ -79,64 +84,71 @@ class NDCOrderCreateTest < Test::Unit::TestCase
           }
         ],
 
-        OrderItems: [
-          {
-            ShoppingResponse: {
+        OrderItems: {
+          ShoppingResponse: {
             Owner: "C9",
             ResponseID: @response_id,
-            Offers: {
-              Offer: {
-                OfferID: {
-                  _Owner: "C9",
-                  __text: "1"
-                },
-                OfferItems: {
-                  OfferItem: [
+            Offers: [
+              {
+                Offer: {
+                  OfferID: {
+                    _Owner: "C9",
+                    __text: "1"
+                  },
+                  OfferItems: [
                     {
-                      OfferItemID: {
-                        _Owner: "C9",
-                        __text: "1#M#108191383#108215274"
-                      },
-                      Passengers: {
-                        PassengerReference: "PAX1"
-                      },
-                      AssociatedServices: {
-                        AssociatedService: [
+                      OfferItem: {
+                        OfferItemID: {
+                          _Owner: "C9",
+                          __text: "1#M#108191383#108215274"
+                        },
+                        Passengers: [
+                          PassengerReference: "PAX1"
+                        ],
+                        AssociatedServices: [
                           {
-                            ServiceID: {
-                              _Owner: "C9",
-                              __text: "SV1"
+                            AssociatedService: {
+                              ServiceID: {
+                                _Owner: "C9",
+                                __text: "SV1"
+                              }
                             }
                           },
                           {
-                            ServiceID: {
-                              _Owner: "C9",
-                              __text: "SV2"
+                            AssociatedService: {
+                              ServiceID: {
+                                _Owner: "C9",
+                                __text: "SV2"
+                              }
                             }
                           }
                         ]
                       }
                     },
                     {
-                      OfferItemID: {
-                        _Owner: "C9",
-                        __text: "2#M#108191383#108215274"
-                      },
-                      Passengers: {
-                        PassengerReference: "PAX2"
-                      },
-                      AssociatedServices: {
-                        AssociatedService: [
+                      OfferItem: {
+                        OfferItemID: {
+                          _Owner: "C9",
+                          __text: "2#M#108191383#108215274"
+                        },
+                        Passengers: [
+                          PassengerReference: "PAX2"
+                        ],
+                        AssociatedServices: [
                           {
-                            ServiceID: {
-                              _Owner: "C9",
-                              __text: "SV1"
+                            AssociatedService: {
+                              ServiceID: {
+                                _Owner: "C9",
+                                __text: "SV1"
+                              }
                             }
                           },
                           {
-                            ServiceID: {
-                              _Owner: "C9",
-                              __text: "SV2"
+                            AssociatedService: {
+                              ServiceID: {
+                                _Owner: "C9",
+                                __text: "SV2"
+                              }
                             }
                           }
                         ]
@@ -145,10 +157,10 @@ class NDCOrderCreateTest < Test::Unit::TestCase
                   ]
                 }
               }
-            }
+            ]
           }
-        }
-        ],
+        },
+
 
         Payments: [
           {
@@ -172,21 +184,27 @@ class NDCOrderCreateTest < Test::Unit::TestCase
   								Surname: "Mickey",
   								Given: "Mouse"
     						},
-    						Contacts: {
-  								Contact: {
-  									AddressContact: {
-  										Street: "22 Main Street",
-  										CityName: {
-  											CityCode: "FRA"
-  										},
-  										PostalCode: "14201",
-  										CountryCode: "DE"
-  									},
-  									EmailContact: {
-  										Address: "mithalesh@jrtechnologies.com"
-  									}
+    						Contacts: [
+  								{
+                    Contact: {
+    									AddressContact: {
+    										Street: "22 Main Street",
+    										CityName: {
+    											CityCode: "FRA"
+    										},
+    										PostalCode: "14201",
+    										CountryCode: "DE"
+    									}
+                    }
+                  },
+                  {
+                    Contact: {
+    									EmailContact: {
+    										Address: "mithalesh@jrtechnologies.com"
+    									}
+                    }
   								}
-    						}
+    						]
       				}
         		}
           }
