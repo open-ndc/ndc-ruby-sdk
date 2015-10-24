@@ -13,56 +13,63 @@ module NDCClient
           if data.hpath('Query/Passengers').present?
             xml.Passengers {
               data.hpath('Query/Passengers').each do |passenger|
-                xml.Passenger((passenger.hpath('_ObjectKey').present? ? {ObjectKey: passenger.hpath('_ObjectKey')} : nil )) {
-                  xml.PTC((passenger.hpath('PTC/_Quantity').present? ? {Quantity: passenger.hpath('PTC/_Quantity')} : nil )) { xml.text passenger.hpath('PTC/__text') }
-                  xml.ResidenceCode_ passenger.hpath('ResidenceCode')
+                xml.Passenger((passenger.hpath('Passenger/_ObjectKey').present? ? {ObjectKey: passenger.hpath('Passenger/_ObjectKey')} : nil )) {
+                  xml.PTC((passenger.hpath('Passenger/PTC/_Quantity').present? ? {Quantity: passenger.hpath('Passenger/PTC/_Quantity')} : nil )) { xml.text passenger.hpath('Passenger/PTC/__text') }
+                  xml.ResidenceCode_ passenger.hpath('Passenger/ResidenceCode')
                   xml.Age {
-                    xml.BirthDate_ passenger.hpath('Age/BirthDate') if passenger.hpath('PTC/Age/BirthDate').present?
+                    xml.BirthDate_ passenger.hpath('Passenger/Age/BirthDate') if passenger.hpath('Passenger/PTC/Age/BirthDate').present?
                   }
-                  xml.Gender_ passenger.hpath('Gender')
+                  xml.Gender_ passenger.hpath('Passenger/Gender')
                   xml.Name {
-                    xml.Surname_ passenger.hpath('Name/Surname')
-                    xml.Given_ passenger.hpath('Name/Given')
-                    xml.Title_ passenger.hpath('Name/Title')
-                    xml.Middle_ passenger.hpath('Name/Middle')
+                    xml.Surname_ passenger.hpath('Passenger/Name/Surname')
+                    xml.Given_ passenger.hpath('Passenger/Name/Given')
+                    xml.Title_ passenger.hpath('Passenger/Name/Title')
+                    xml.Middle_ passenger.hpath('Passenger/Name/Middle')
                   }
-                  xml.ProfileID_ passenger.hpath('ProfileID')
-                  if passenger.hpath('Contacts').present?
-                    passenger.hpath('Contacts').each {|contact|
-                      xml.Contact{
-                        if contact.hpath('Contact/EmailContact').present?
-                          xml.EmailContact {
-                            xml.Address_ contact.hpath('Contact/EmailContact/Address')
-                          }
-                        end
-                        if contact.hpath('Contact/PhoneContact').present?
-                          xml.PhoneContact {
-                            xml.Application_ contact.hpath('Contact/PhoneContact/Application')
-                            xml.Number_ contact.hpath('Contact/PhoneContact/Number')
-                          }
-                        end
-                        if contact.hpath('Contact/AddressContact').present?
-                          xml.AddressContact {
-                            xml.Application_ contact.hpath('Contact/AddressContact/Application')
-                            xml.Number_ contact.hpath('Contact/PhoneContact/Number')
-                          }
-                        end
-                      }
+                  xml.ProfileID_ passenger.hpath('Passenger/ProfileID')
+                  if passenger.hpath('Passenger/Contacts').present?
+                    xml.Contacts {
+                      passenger.hpath('Passenger/Contacts').each do |contact|
+                        xml.Contact{
+                          if contact.hpath('Contact/EmailContact').present?
+                            xml.EmailContact {
+                              xml.Address_ contact.hpath('Contact/EmailContact/Address')
+                            }
+                          end
+                          if contact.hpath('Contact/PhoneContact').present?
+                            xml.PhoneContact {
+                              xml.Application_ contact.hpath('Contact/PhoneContact/Application')
+                              xml.Number_ contact.hpath('Contact/PhoneContact/Number')
+                            }
+                          end
+                          if contact.hpath('Contact/AddressContact').present?
+                            xml.AddressContact {
+                              xml.Application_ contact.hpath('Contact/AddressContact/Application')
+                              xml.Street_ contact.hpath('Contact/AddressContact/Street')
+                              xml.CityName {
+                                xml.CityCode_ contact.hpath('Contact/AddressContact/CityName/CityCode')
+                              }
+                              xml.PostalCode contact.hpath('Contact/AddressContact/PostalCode')
+                              xml.CountryCode contact.hpath('Contact/AddressContact/CountryCode')
+                            }
+                          end
+                        }
+                      end
                     }
                   end
                   xml.FQTVs {
                     xml.FQTV_ProgramCore {
-                      xml.FQTV_ProgramID_ passenger.hpath('FQTVs/FQTV_ProgramCore/FQTV_ProgramID')
-                      xml.ProviderID_ passenger.hpath('FQTVs/FQTV_ProgramCore/ProviderID')
+                      xml.FQTV_ProgramID_ passenger.hpath('Passenger/FQTVs/FQTV_ProgramCore/FQTV_ProgramID')
+                      xml.ProviderID_ passenger.hpath('Passenger/FQTVs/FQTV_ProgramCore/ProviderID')
                       xml.Account {
-                        xml.Number_ passenger.hpath('FQTVs/FQTV_ProgramCore/Account/Number')
+                        xml.Number_ passenger.hpath('Passenger/FQTVs/FQTV_ProgramCore/Account/Number')
                       }
                     }
                   }
                   xml.PassengerIDInfo {
                     xml.FOID {
-                      xml.Type_ passenger.hpath('PassengerIDInfo/FOID/Type')
-                      xml.ID_ passenger.hpath('PassengerIDInfo/FOID/ID')
+                      xml.Type_ passenger.hpath('Passenger/PassengerIDInfo/FOID/Type')
+                      xml.ID_ passenger.hpath('Passenger/PassengerIDInfo/FOID/ID')
                     }
                   }
                 }
@@ -125,8 +132,10 @@ module NDCClient
                       }
                       xml.Amount((payment.hpath('Payment/Amount/_Taxable').present? ? {Taxable: payment.hpath('Payment/Amount/_Taxable')} : nil)) {xml.text payment.hpath('Payment/Amount/__text')}
                       xml.Payer {
-                        xml.Name_ payment.hpath('Payment/Payer/Name')
-                        xml.Surname_ payment.hpath('Payment/Amount/Surname')
+                        xml.Name {
+                          xml.Surname_ payment.hpath('Payment/Payer/Name/Surname')
+                          xml.Given_ payment.hpath('Payment/Payer/Name/Given')
+                        }
                       }
                       if payment.hpath('Payment/Payer/Contacts').present?
                         xml.Contacts {
@@ -144,7 +153,7 @@ module NDCClient
                               end
                               if contact.hpath('Contact/EmailContact').present?
                                 xml.EmailContact {
-                                  xml.Address_ contact.hpath('Contact/AddressContact/EmailContact/Address')
+                                  xml.Address_ contact.hpath('Contact/EmailContact/Address')
                                 }
                               end
                             }
