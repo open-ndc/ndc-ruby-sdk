@@ -10,4 +10,8 @@ only:
   - master
   - dev
 
-script: "bundle exec rake test"
+install:
+  - "mkdir ./log"
+
+script:
+  - "bundle exec rake test"
