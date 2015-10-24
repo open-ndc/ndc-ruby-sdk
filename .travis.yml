@@ -12,6 +12,7 @@ only:
 
 install:
   - "mkdir ./log"
+  - "bundle install"
 
 script:
   - "bundle exec rake test"
