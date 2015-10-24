@@ -9,3 +9,5 @@ branches:
 only:
   - master
   - dev
+
+script: "bundle exec rake test"
