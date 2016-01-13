@@ -22,8 +22,7 @@ class NDCAirShoppingTest < Test::Unit::TestCase
 
   describe "Sends an invalid AirShopping request" do
 
-    ndc_config = YAML.load_file('test/config/ndc-iata-kronos.yml')
-    @@ndc_client = NDCClient::Base.new(ndc_config)
+    @@ndc_client = NDCClient::Base.new(@@ndc_config)
 
     query_params = {
       CoreQuery: {
@@ -72,8 +71,7 @@ class NDCAirShoppingTest < Test::Unit::TestCase
 
   describe "Sends a valid AirShopping request" do
 
-    ndc_config = YAML.load_file('test/config/ndc-iata-kronos.yml')
-    @@ndc_client = NDCClient::Base.new(ndc_config)
+    @@ndc_client = NDCClient::Base.new(@@ndc_config)
 
     @@ndc_response = @@ndc_client.request(:AirShopping, VALID_REQUEST_PARAMS)
 
