@@ -5,8 +5,7 @@ class NDCFlightPriceTest < Test::Unit::TestCase
 
   describe "Sends an invalid FlightPrice request" do
 
-    ndc_config = YAML.load_file('test/config/ndc-iata-kronos.yml')
-    @@ndc_client = NDCClient::Base.new(ndc_config)
+    @@ndc_client = NDCClient::Base.new(@@ndc_config)
 
     query_params = {
       Query: {
@@ -67,8 +66,7 @@ class NDCFlightPriceTest < Test::Unit::TestCase
 
   describe "Sends a valid FlightPrice request" do
 
-    ndc_config = YAML.load_file('test/config/ndc-iata-kronos.yml')
-    @@ndc_client = NDCClient::Base.new(ndc_config)
+    @@ndc_client = NDCClient::Base.new(@@ndc_config)
 
     query_params = {
       Query: {

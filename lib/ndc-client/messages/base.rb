@@ -135,35 +135,12 @@ module NDCClient
               }
             end
 
-            xml.Metadata {
-              xml.Other {
-                xml.OtherMetadata {
-                  xml.LanguageMetadatas {
-                    xml.LanguageMetadata(MetadataKey: "Display"){
-                      xml.Application_ "Display"
-                      xml.Code_ISO_ "en"
-                    }
-                  }
-                }
-              }
-            }
-
             if self.respond_to?(:yield_datalist)
               yield_datalist(data, xml)
             else
 
               if data.hpath('DataList').present?
                 xml.DataList {
-                  if data.hpath('DataList/OriginDestinationList').present?
-                    xml.OriginDestinationList {
-                      if data.hpath('DataList/OriginDestinationList/OriginDestination').present?
-                        xml.OriginDestination((data.hpath('DataList/OriginDestinationList/OriginDestination/_OriginDestinationKey').present? ? {OriginDestinationKey: data.hpath('DataList/OriginDestinationList/OriginDestination/_OriginDestinationKey')} : nil )) {
-                            xml.DepartureCode_ data.hpath('DataList/OriginDestinationList/OriginDestination/DepartureCode')
-                            xml.ArrivalCode_ data.hpath('DataList/OriginDestinationList/OriginDestination/ArrivalCode')
-                        }
-                      end
-                    }
-                  end
                   if data.hpath('DataList/FlightSegmentList').present?
                     xml.FlightSegmentList {
                       data.hpath('DataList/FlightSegmentList').each { |fs|
@@ -225,14 +202,41 @@ module NDCClient
                           xml.Journey {
                             xml.Time_ flight.hpath('Journey/Time')
                           }
+                          xml.SegmentReferences_ flight.hpath('SegmentReferences')
                         }
                       }
+                    }
+                  end
+
+                  if data.hpath('DataList/OriginDestinationList').present?
+                    xml.OriginDestinationList {
+                      if data.hpath('DataList/OriginDestinationList/OriginDestination').present?
+                        xml.OriginDestination((data.hpath('DataList/OriginDestinationList/OriginDestination/_OriginDestinationKey').present? ? {OriginDestinationKey: data.hpath('DataList/OriginDestinationList/OriginDestination/_OriginDestinationKey')} : nil )) {
+                            xml.DepartureCode_ data.hpath('DataList/OriginDestinationList/OriginDestination/DepartureCode')
+                            xml.ArrivalCode_ data.hpath('DataList/OriginDestinationList/OriginDestination/ArrivalCode')
+                        }
+                      end
                     }
                   end
 
                 }
               end
             end
+
+            # Metadata block
+            xml.Metadata {
+              xml.Other {
+                xml.OtherMetadata {
+                  xml.LanguageMetadatas {
+                    xml.LanguageMetadata(MetadataKey: "Display"){
+                      xml.Application_ "Display"
+                      xml.Code_ISO_ "en"
+                    }
+                  }
+                }
+              }
+            }
+
           }
 
         }

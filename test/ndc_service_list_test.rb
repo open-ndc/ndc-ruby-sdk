@@ -5,8 +5,7 @@ class NDCServiceListTest < Test::Unit::TestCase
 
   describe "Sends an valid ServiceList request" do
 
-    ndc_config = YAML.load_file('test/config/ndc-iata-kronos.yml')
-    @@ndc_client = NDCClient::Base.new(ndc_config)
+    @@ndc_client = NDCClient::Base.new(@@ndc_config)
 
     @@ndc_response = @@ndc_client.request(:AirShopping, NDCAirShoppingTest::VALID_REQUEST_PARAMS)
     @response_id = @@ndc_response.hpath('AirShoppingRS/ShoppingResponseIDs/ResponseID')
