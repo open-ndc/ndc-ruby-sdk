@@ -1,8 +1,8 @@
 # Run tests using IATA NDC sample sandbox Kronos
-label: KRO
+label: WRO
 
 rest:
-  url: http://kronos.jrtechnologies.com/dondc
+  url: http://invalid.server.com/ndc
   headers:
     - Accept: application/xml
     - Content-Type: application/xml
