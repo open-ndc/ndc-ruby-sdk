@@ -7,7 +7,7 @@ class NDCFlightPriceTest < Test::Unit::TestCase
 
     @@ndc_client = NDCClient::Base.new(@@ndc_config)
 
-    query_params = {
+    invalid_query_params = {
       Query: {
         OriginDestination: [
           {
@@ -16,12 +16,6 @@ class NDCFlightPriceTest < Test::Unit::TestCase
                 AirportCode: 'ARN',
                 Date: '2016-05-05',
                 Time: '06:00'
-              },
-              Arrival: {
-                AirportCode: 'FRA',
-                Date: '2016-05-05',
-                Time: '08:10',
-                AirportName: 'Frankfurt International'
               },
               MarketingCarrier: {
                 AirlineID: "C9",
@@ -55,9 +49,9 @@ class NDCFlightPriceTest < Test::Unit::TestCase
       }
     }
 
-    test "Raises a response error" do
-      assert_raises(NDCClient::NDCErrors::NDCInvalidResponseFormat) {
-        @@ndc_response = @@ndc_client.request(:FlightPrice, query_params)
+    test "Flight requires arrival deltails" do
+      assert_raises(NDCClient::NDCErrors::NDCInvalidServerResponse) {
+        @@ndc_response = @@ndc_client.request(:FlightPrice, invalid_query_params)
       }
     end
 
@@ -155,15 +149,15 @@ class NDCFlightPriceTest < Test::Unit::TestCase
       refute_nil @@ndc_response["FlightPriceRS"].has_key?("Success")
     end
 
-    test "Document version is ok" do
+    test "MessageVersion is ok" do
       refute_empty @@ndc_response.hpath('FlightPriceRS/Document')
-      assert_equal @@ndc_response.hpath('FlightPriceRS/Document/ReferenceVersion'), "1.0"
+      assert_equal @@ndc_response.hpath('FlightPriceRS/Document/MessageVersion'), "15.2"
     end
 
-    test "ShoppingResponseIDs is ok" do
-      refute_empty @@ndc_response.hpath('FlightPriceRS/ShoppingResponseIDs')
-      refute_empty @@ndc_response.hpath('FlightPriceRS/ShoppingResponseIDs/ResponseID')
-    end
+    # test "ShoppingResponseIDs is ok" do
+    #   refute_empty @@ndc_response.hpath('FlightPriceRS/ShoppingResponseIDs')
+    #   refute_empty @@ndc_response.hpath('FlightPriceRS/ShoppingResponseIDs/ResponseID')
+    # end
 
   end
 

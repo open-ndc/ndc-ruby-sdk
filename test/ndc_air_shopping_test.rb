@@ -24,7 +24,7 @@ class NDCAirShoppingTest < Test::Unit::TestCase
 
     @@ndc_client = NDCClient::Base.new(@@ndc_config)
 
-    query_params = {
+    invalid_query_params = {
       CoreQuery: {
         OriginDestinations: {
           OriginDestination: {
@@ -40,12 +40,12 @@ class NDCAirShoppingTest < Test::Unit::TestCase
     }
 
     test "AirShopping request requires Departure/Date" do
-      assert_raises(NDCClient::NDCErrors::NDCInvalidResponseFormat) {
-        @@ndc_response = @@ndc_client.request(:AirShopping, query_params)
+      assert_raises(NDCClient::NDCErrors::NDCInvalidServerResponse) {
+        @@ndc_response = @@ndc_client.request(:AirShopping, invalid_query_params)
       }
     end
 
-    query_params = {
+    invalid_query_params = {
       CoreQuery: {
         OriginDestinations: {
           OriginDestination: {
@@ -61,8 +61,8 @@ class NDCAirShoppingTest < Test::Unit::TestCase
     }
 
     test "AirShopping request requires Arrival data" do
-      assert_raises(NDCClient::NDCErrors::NDCInvalidResponseFormat) {
-        @@ndc_response = @@ndc_client.request(:AirShopping, query_params)
+      assert_raises(NDCClient::NDCErrors::NDCInvalidServerResponse) {
+        @@ndc_response = @@ndc_client.request(:AirShopping, invalid_query_params)
       }
     end
 
@@ -84,9 +84,9 @@ class NDCAirShoppingTest < Test::Unit::TestCase
       refute_nil @@ndc_response["AirShoppingRS"].has_key?("Success")
     end
 
-    test "Document version is ok" do
+    test "MessageVersion is ok" do
       refute_empty @@ndc_response.hpath('AirShoppingRS/Document')
-      assert_equal @@ndc_response.hpath('AirShoppingRS/Document/ReferenceVersion'), "1.0"
+      assert_equal @@ndc_response.hpath('AirShoppingRS/Document/MessageVersion'), "15.2"
     end
 
     test "ShoppingResponseIDs is ok" do

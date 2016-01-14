@@ -6,7 +6,7 @@ class NDCBaseTest < Test::Unit::TestCase
   describe "Client Base instance initialized wrong" do
 
     setup do
-      @ndc_client = NDCClient::Base.new(@wrong_ndc_config)
+      @ndc_client = NDCClient::Base.new(@@wrong_ndc_config)
     end
 
     test "Config is wrong" do
@@ -18,7 +18,7 @@ class NDCBaseTest < Test::Unit::TestCase
   describe "Client Base instance initialized OK" do
 
     setup do
-      @ndc_client = NDCClient::Base.new(@ndc_config)
+      @ndc_client = NDCClient::Base.new(@@ndc_config)
     end
 
     test "Config is OK" do
