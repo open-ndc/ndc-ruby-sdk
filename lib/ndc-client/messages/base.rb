@@ -40,7 +40,7 @@ module NDCClient
 
             xml.Document {
               xml.Name_ "NDC Message"
-              xml.MessageVersion_ "1.1.5"
+              # xml.MessageVersion_ "1.1.5"
               xml.ReferenceVersion_ "1.0"
             }
 
@@ -62,8 +62,11 @@ module NDCClient
               }
             }
 
-            # Inserts core query data taken from the subclass
-            yield_core_query(data, xml)
+            xml.Parameters {
+              xml.CurrCodes {
+                xml.CurrCode_ data.hpath('Parameters/CurrCodes/CurrCode')
+              }
+            }
 
             xml.Travelers {
               xml.Traveler {
@@ -72,6 +75,7 @@ module NDCClient
                 }
               }
             }
+
             if data.hpath('PointOfSale').present?
               xml.PointOfSale {
                 xml.Location {
@@ -94,47 +98,42 @@ module NDCClient
               }
             end
 
-            xml.Preferences {
-              xml.Preference {
-                xml.AirlinePreferences {
-                  xml.Airline {
-                    xml.AirlineID_ data.hpath('Preference/AirlinePreferences/Airline/AirlineID')
-                  }
-                }
-                xml.FarePreferences {
-                  xml.Types {
-                    xml.Type {
-                      xml.Code_ data.hpath('Preference/FarePreferences/Types/Type/Code')
+            yield_core_query(data, xml) # Inserts core query data taken from the subclass
+
+            if data.hpath('Preferences').present?
+              xml.Preferences {
+                if data.hpath('Preferences/Preference/AirlinePreferences').present?
+                  xml.Preference {
+                    xml.AirlinePreferences {
+                      xml.Airline {
+                        xml.AirlineID_ data.hpath('Preference/AirlinePreferences/Airline/AirlineID')
+                      }
                     }
                   }
-                }
-                xml.CabinPreferences {
-                  xml.CabinType {
-                    xml.Code_ data.hpath('Preference/CabinPreferences/CabinType/Code')
-                    xml.Definition_ data.hpath('Preference/CabinPreferences/CabinType/Definition')
-                  }
-                }
-              }
-
-              xml.Parameters {
-                xml.CurrCodes {
-                  xml.CurrCode_ data.hpath('Parameters/CurrCodes/CurrCode')
-                }
-              }
-            }
-
-            xml.Metadata {
-              xml.Other {
-                xml.OtherMetadata {
-                  xml.LanguageMetadatas {
-                    xml.LanguageMetadata(MetadataKey: "Display"){
-                      xml.Application_ "Display"
-                      xml.Code_ISO_ "en"
+                end
+                if data.hpath('Preferences/Preference/FarePreferences').present?
+                  xml.Preference {
+                    xml.FarePreferences {
+                      xml.Types {
+                        xml.Type {
+                          xml.Code_ data.hpath('Preference/FarePreferences/Types/Type/Code')
+                        }
+                      }
                     }
                   }
-                }
+                end
+                if data.hpath('Preferences/Preference/CabinPreferences').present?
+                  xml.Preference {
+                    xml.CabinPreferences {
+                      xml.CabinType {
+                        xml.Code_ data.hpath('Preference/CabinPreferences/CabinType/Code')
+                        xml.Definition_ data.hpath('Preference/CabinPreferences/CabinType/Definition')
+                      }
+                    }
+                  }
+                end
               }
-            }
+            end
 
             if self.respond_to?(:yield_datalist)
               yield_datalist(data, xml)
@@ -142,16 +141,6 @@ module NDCClient
 
               if data.hpath('DataList').present?
                 xml.DataList {
-                  if data.hpath('DataList/OriginDestinationList').present?
-                    xml.OriginDestinationList {
-                      if data.hpath('DataList/OriginDestinationList/OriginDestination').present?
-                        xml.OriginDestination((data.hpath('DataList/OriginDestinationList/OriginDestination/_OriginDestinationKey').present? ? {OriginDestinationKey: data.hpath('DataList/OriginDestinationList/OriginDestination/_OriginDestinationKey')} : nil )) {
-                            xml.DepartureCode_ data.hpath('DataList/OriginDestinationList/OriginDestination/DepartureCode')
-                            xml.ArrivalCode_ data.hpath('DataList/OriginDestinationList/OriginDestination/ArrivalCode')
-                        }
-                      end
-                    }
-                  end
                   if data.hpath('DataList/FlightSegmentList').present?
                     xml.FlightSegmentList {
                       data.hpath('DataList/FlightSegmentList').each { |fs|
@@ -171,16 +160,16 @@ module NDCClient
                           }
                           if flight_segment.hpath('MarketingCarrier')
                             xml.MarketingCarrier {
-                              xml.AirlineID_ flight_segment.hpath('MarketingCarrier/AirlineID')
-                              xml.Name_ flight_segment.hpath('MarketingCarrier/Name')
-                              xml.FlightNumber_ flight_segment.hpath('MarketingCarrier/FlightNumber')
+                              xml.AirlineID_ flight_segment.hpath('MarketingCarrier/AirlineID') if flight_segment.hpath('MarketingCarrier/AirlineID').present?
+                              xml.Name_ flight_segment.hpath('MarketingCarrier/Name') if flight_segment.hpath('MarketingCarrier/Name').present?
+                              xml.FlightNumber_ flight_segment.hpath('MarketingCarrier/FlightNumber') if flight_segment.hpath('MarketingCarrier/FlightNumber').present?
                             }
                           end
                           if flight_segment.hpath('OperatingCarrier')
                             xml.OperatingCarrier {
-                              xml.AirlineID_ flight_segment.hpath('OperatingCarrier/AirlineID')
-                              xml.Name_ flight_segment.hpath('OperatingCarrier/Name')
-                              xml.FlightNumber_ flight_segment.hpath('OperatingCarrier/FlightNumber')
+                              xml.AirlineID_ flight_segment.hpath('OperatingCarrier/AirlineID') if flight_segment.hpath('OperatingCarrier/AirlineID').present?
+                              xml.Name_ flight_segment.hpath('OperatingCarrier/Name') if flight_segment.hpath('OperatingCarrier/Name').present?
+                              xml.FlightNumber_ flight_segment.hpath('OperatingCarrier/FlightNumber') if flight_segment.hpath('OperatingCarrier/FlightNumber').present?
                             }
                           end
                           if flight_segment.hpath('Equipment')
@@ -213,14 +202,41 @@ module NDCClient
                           xml.Journey {
                             xml.Time_ flight.hpath('Journey/Time')
                           }
+                          xml.SegmentReferences_ flight.hpath('SegmentReferences')
                         }
                       }
+                    }
+                  end
+
+                  if data.hpath('DataList/OriginDestinationList').present?
+                    xml.OriginDestinationList {
+                      if data.hpath('DataList/OriginDestinationList/OriginDestination').present?
+                        xml.OriginDestination((data.hpath('DataList/OriginDestinationList/OriginDestination/_OriginDestinationKey').present? ? {OriginDestinationKey: data.hpath('DataList/OriginDestinationList/OriginDestination/_OriginDestinationKey')} : nil )) {
+                            xml.DepartureCode_ data.hpath('DataList/OriginDestinationList/OriginDestination/DepartureCode')
+                            xml.ArrivalCode_ data.hpath('DataList/OriginDestinationList/OriginDestination/ArrivalCode')
+                        }
+                      end
                     }
                   end
 
                 }
               end
             end
+
+            # Metadata block
+            xml.Metadata {
+              xml.Other {
+                xml.OtherMetadata {
+                  xml.LanguageMetadatas {
+                    xml.LanguageMetadata(MetadataKey: "Display"){
+                      xml.Application_ "Display"
+                      xml.Code_ISO_ "en"
+                    }
+                  }
+                }
+              }
+            }
+
           }
 
         }

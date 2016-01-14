@@ -1,7 +1,7 @@
 module NDCClient
   module Messages
 
-    class OrderCreateRQ < Messages::Base
+    class OrderRetriveRQ < Messages::Base
 
       def initialize(params = {})
         super(params)

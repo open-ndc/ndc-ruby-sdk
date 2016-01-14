@@ -19,10 +19,12 @@ module NDCClient
                 xml.AirportCode_ data.hpath('CoreQuery/OriginDestinations/OriginDestination/Arrival/AirportCode')
                 xml.Date_ data.hpath('CoreQuery/OriginDestinations/OriginDestination/Arrival/Date') if data.hpath('CoreQuery/OriginDestinations/OriginDestination/Arrival/Date')
               }
-              xml.MarketingCarrierAirline {
-                xml.AirlineID_ data.hpath('CoreQuery/OriginDestinations/OriginDestination/MarketingCarrierAirline/AirlineID')
-                xml.Name_ data.hpath('CoreQuery/OriginDestinations/OriginDestination/MarketingCarrierAirline/Name')
-              }
+              if data.hpath('CoreQuery/OriginDestinations/OriginDestination/MarketingCarrierAirline')
+                xml.MarketingCarrierAirline {
+                  xml.AirlineID_ data.hpath('CoreQuery/OriginDestinations/OriginDestination/MarketingCarrierAirline/AirlineID') if data.hpath('CoreQuery/OriginDestinations/OriginDestination/MarketingCarrierAirline/AirlineID').present?
+                  xml.Name_ data.hpath('CoreQuery/OriginDestinations/OriginDestination/MarketingCarrierAirline/Name') if data.hpath('CoreQuery/OriginDestinations/OriginDestination/MarketingCarrierAirline/Name').present?
+                }
+              end
             }
           }
         }

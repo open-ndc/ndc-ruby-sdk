@@ -5,8 +5,7 @@ class NDCOrderCancelTest < Test::Unit::TestCase
 
   describe "Sends an valid OrderCancel request" do
 
-    ndc_config = YAML.load_file('test/config/ndc-iata-kronos.yml')
-    @@ndc_client = NDCClient::Base.new(ndc_config)
+    @@ndc_client = NDCClient::Base.new(@@ndc_config)
 
     # @@ndc_response = @@ndc_client.request(:AirShopping, NDCAirShoppingTest::VALID_REQUEST_PARAMS)
     # @response_id = @@ndc_response.hpath('AirShoppingRS/ShoppingResponseIDs/ResponseID')
@@ -31,9 +30,9 @@ class NDCOrderCancelTest < Test::Unit::TestCase
     #   assert @@ndc_client.valid_response?
     # end
     #
-    # test "Document version is ok" do
+    # test "MessageVersion is ok" do
     #   refute_empty @@ndc_response.hpath('OrderCancelRS/Document')
-    #   assert_equal @@ndc_response.hpath('OrderCancelRS/Document/ReferenceVersion'), "1.0"
+    #   assert_equal @@ndc_response.hpath('OrderCancelRS/Document/MessageVersion'), "15.2"
     # end
     #
     # test "Response includes Success element" do

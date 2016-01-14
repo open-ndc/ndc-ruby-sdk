@@ -1,0 +1,18 @@
+language: ruby
+rvm:
+  - 2.0.0-p598
+  - 2.1.0
+  - 2.2.2
+  - jruby-19mode # JRuby in 1.9 mode
+
+branches:
+only:
+  - master
+  - dev
+
+install:
+  - "mkdir ./log"
+  - "bundle install"
+
+script:
+  - "bundle exec rake test"
