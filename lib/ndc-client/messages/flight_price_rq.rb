@@ -9,78 +9,53 @@ module NDCClient
 
       def yield_core_query(data, xml)
         xml.Query {
-          xml.OriginDestination {
-            if data.hpath('Query/OriginDestination/0/Flight').present?
-              flight1 = data.hpath('Query/OriginDestination/0/Flight')
-              xml.Flight {
-                xml.Departure {
-                  xml.AirportCode_ flight1.hpath('Departure/AirportCode')
-                  xml.Date_ flight1.hpath('Departure/Date')
-                  xml.Time_ flight1.hpath('Departure/Time')
-                  xml.AirportName_ flight1.hpath('Departure/AirportName')
+          originDestinations = data.hpath('Query/OriginDestination')
+            unless originDestinations.size.zero?
+              originDestinations.each do |originDestination|
+                xml.OriginDestination {
+                  unless originDestination.size.zero?
+                    originDestination.each do |_key, flights|
+                    flights.each do |flight|
+                      if flight.is_a? Hash
+                        xml.Flight {
+                        xml.Departure {
+                          xml.AirportCode_ flight.hpath('Departure/AirportCode')
+                          xml.Date_ flight.hpath('Departure/Date')
+                          xml.Time_ flight.hpath('Departure/Time')
+                          xml.AirportName_ flight.hpath('Departure/AirportName')
+                        }
+                        xml.Arrival {
+                          xml.AirportCode_ flight.hpath('Arrival/AirportCode')
+                          xml.Date_ flight.hpath('Arrival/Date')
+                          xml.Time_ flight.hpath('Arrival/Time')
+                          xml.AirportName_ flight.hpath('Arrival/AirportName')
+                        }
+                        xml.MarketingCarrier {
+                          xml.AirlineID_ flight.hpath('MarketingCarrier/AirlineID')
+                          xml.Name_ flight.hpath('MarketingCarrier/Name')
+                          xml.FlightNumber_ flight.hpath('MarketingCarrier/FlightNumber')
+                        }
+                        xml.OperatingCarrier {
+                          xml.AirlineID_ flight.hpath('OperatingCarrier/AirlineID')
+                          xml.Name_ flight.hpath('OperatingCarrier/Name')
+                          xml.FlightNumber_ flight.hpath('OperatingCarrier/FlightNumber')
+                        }
+                        xml.Equipment {
+                          xml.AircraftCode_ flight.hpath('Equipment/AircraftCode')
+                          xml.Name_ flight.hpath('Equipment/Name')
+                        }
+                        xml.CabinType {
+                          xml.Code_ flight.hpath('CabinType/Code')
+                          xml.Definition_ flight.hpath('CabinType/Definition')
+                        }
+                      }
+                      end
+                    end
+                    end
+                  end
                 }
-                xml.Arrival {
-                  xml.AirportCode_ flight1.hpath('Arrival/AirportCode')
-                  xml.Date_ flight1.hpath('Arrival/Date')
-                  xml.Time_ flight1.hpath('Arrival/Time')
-                  xml.AirportName_ flight1.hpath('Arrival/AirportName')
-                }
-                xml.MarketingCarrier {
-                  xml.AirlineID_ flight1.hpath('MarketingCarrier/AirlineID')
-                  xml.Name_ flight1.hpath('MarketingCarrier/Name')
-                  xml.FlightNumber_ flight1.hpath('MarketingCarrier/FlightNumber')
-                }
-                xml.OperatingCarrier {
-                  xml.AirlineID_ flight1.hpath('OperatingCarrier/AirlineID')
-                  xml.Name_ flight1.hpath('OperatingCarrier/Name')
-                  xml.FlightNumber_ flight1.hpath('OperatingCarrier/FlightNumber')
-                }
-                xml.Equipment {
-                  xml.AircraftCode_ flight1.hpath('Equipment/AircraftCode')
-                  xml.Name_ flight1.hpath('Equipment/Name')
-                }
-                xml.CabinType {
-                  xml.Code_ flight1.hpath('CabinType/Code')
-                  xml.Definition_ flight1.hpath('CabinType/Definition')
-                }
-              }
+              end
             end
-            if data.hpath('Query/OriginDestination/1/Flight').present?
-              flight2 = data.hpath('Query/OriginDestination/1/Flight')
-              xml.Flight {
-                xml.Departure {
-                  xml.AirportCode_ flight2.hpath('Departure/AirportCode')
-                  xml.Date_ flight2.hpath('Departure/Date')
-                  xml.Time_ flight2.hpath('Departure/Time')
-                  xml.AirportName_ flight2.hpath('Departure/AirportName')
-                }
-                xml.Arrival {
-                  xml.AirportCode_ flight2.hpath('Arrival/AirportCode')
-                  xml.Date_ flight2.hpath('Arrival/Date')
-                  xml.Time_ flight2.hpath('Arrival/Time')
-                  xml.AirportName_ flight2.hpath('Arrival/AirportName')
-                }
-                xml.MarketingCarrier {
-                  xml.AirlineID_ flight2.hpath('MarketingCarrier/AirlineID')
-                  xml.Name_ flight2.hpath('MarketingCarrier/Name')
-                  xml.FlightNumber_ flight2.hpath('MarketingCarrier/FlightNumber')
-                }
-                xml.OperatingCarrier {
-                  xml.AirlineID_ flight2.hpath('OperatingCarrier/AirlineID')
-                  xml.Name_ flight2.hpath('OperatingCarrier/Name')
-                  xml.FlightNumber_ flight2.hpath('OperatingCarrier/FlightNumber')
-                }
-                xml.Equipment {
-                  xml.AircraftCode_ flight2.hpath('Equipment/AircraftCode')
-                  xml.Name_ flight2.hpath('Equipment/Name')
-                }
-                xml.CabinType {
-                  xml.Code_ flight2.hpath('CabinType/Code')
-                  xml.Definition_ flight2.hpath('CabinType/Definition')
-                }
-              }
-            end
-          }
         }
       end
 

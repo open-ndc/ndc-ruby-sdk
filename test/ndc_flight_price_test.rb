@@ -65,7 +65,7 @@ class NDCFlightPriceTest < Test::Unit::TestCase
     query_params = {
       Query: {
         OriginDestination: [
-          { Flight: {
+          { Flight: [{
             Departure: {
               AirportCode: 'ARN',
               Date: '2016-05-05',
@@ -95,8 +95,8 @@ class NDCFlightPriceTest < Test::Unit::TestCase
               Code: "M",
               Definition: "Economy/coach discounted"
             }
-          }},
-          { Flight: {
+          }]},
+          { Flight: [{
             Departure: {
               AirportCode: 'FRA',
               Date: '2016-05-05',
@@ -126,7 +126,7 @@ class NDCFlightPriceTest < Test::Unit::TestCase
               Code: "M",
               Definition: "Economy/coach discounted"
             }
-          }}
+          }]}
         ]
       },
       DataLists: {
