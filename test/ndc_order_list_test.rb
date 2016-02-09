@@ -1,4 +1,4 @@
-require 'test_helper'
+require_relative 'test_helper'
 
 class NDCOrderListTest < Test::Unit::TestCase
   extend Minitest::Spec::DSL

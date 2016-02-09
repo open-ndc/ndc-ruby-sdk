@@ -1,4 +1,4 @@
-require 'test_helper'
+require_relative 'test_helper'
 
 class NDCServiceListTest < Test::Unit::TestCase
   extend Minitest::Spec::DSL
@@ -28,7 +28,7 @@ class NDCServiceListTest < Test::Unit::TestCase
     end
 
     test "Response includes Success element" do
-      refute_nil @@ndc_response["ServiceListRS"].has_key?("Success")
+      refute_nil @@ndc_response.deep_symbolize_keys![:ServiceListRS].has_key?("Success")
     end
 
   end

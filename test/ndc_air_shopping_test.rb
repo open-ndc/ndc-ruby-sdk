@@ -1,4 +1,4 @@
-require 'test_helper'
+require_relative 'test_helper'
 
 class NDCAirShoppingTest < Test::Unit::TestCase
   extend Minitest::Spec::DSL
@@ -81,7 +81,7 @@ class NDCAirShoppingTest < Test::Unit::TestCase
     end
 
     test "Response includes Success element" do
-      refute_nil @@ndc_response["AirShoppingRS"].has_key?("Success")
+      refute_nil @@ndc_response.deep_symbolize_keys![:AirShoppingRS].has_key?("Success")
     end
 
     test "MessageVersion is ok" do

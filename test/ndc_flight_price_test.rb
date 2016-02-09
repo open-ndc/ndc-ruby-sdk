@@ -1,4 +1,4 @@
-require 'test_helper'
+require_relative 'test_helper'
 
 class NDCFlightPriceTest < Test::Unit::TestCase
   extend Minitest::Spec::DSL
@@ -145,19 +145,62 @@ class NDCFlightPriceTest < Test::Unit::TestCase
       assert @@ndc_client.valid_response?
     end
 
+    test 'Fetching result' do
+      ndc_client = NDCClient::Base.new(@@ndc_config)
+      params = {
+          Query: {
+              OriginDestination: [
+                  {
+                      Flight: [
+                          {
+                              Departure: {
+                                  AirportCode: 'SFX',
+                                  Date: '2016-04-01',
+                                  Time: '20:30'
+                              },
+                              Arrival: {
+                                  AirportCode: 'MAD',
+                                  Date: '2016-04-02',
+                                  Time: '23:10'
+                              },
+                              MarketingCarrier: {
+                                  AirlineID: 'id',
+                                  FlightNumber: '1'
+                              },
+                              OperatingCarrier: {
+                                  AirlineID: 'id',
+                                  FlightNumber: '1'
+                              },
+                              Equipment: {
+                                  AircraftCode: '333'
+                              },
+                              CabinType: {
+                                  Code: 'M'
+                              }
+                          }
+                      ]
+                  },
+              ]
+          }
+      }
+      @@ndc_response = ndc_client.request(:FlightPrice, params)
+      assert !@@ndc_response.hpath('FlightPriceRS/PricedFlightOffers').size.zero?
+    end
+
+    test "ShoppingResponseIDs is ok" do
+      refute_empty @@ndc_response.hpath('FlightPriceRS/ShoppingResponseIDs')
+      refute_empty @@ndc_response.hpath('FlightPriceRS/ShoppingResponseIDs/ResponseID')
+    end
+
+
     test "Response includes Success element" do
-      refute_nil @@ndc_response["FlightPriceRS"].has_key?("Success")
+      refute_nil @@ndc_response.deep_symbolize_keys![:FlightPriceRS].has_key?("Success")
     end
 
     test "MessageVersion is ok" do
       refute_empty @@ndc_response.hpath('FlightPriceRS/Document')
       assert_equal @@ndc_response.hpath('FlightPriceRS/Document/MessageVersion'), "15.2"
     end
-
-    # test "ShoppingResponseIDs is ok" do
-    #   refute_empty @@ndc_response.hpath('FlightPriceRS/ShoppingResponseIDs')
-    #   refute_empty @@ndc_response.hpath('FlightPriceRS/ShoppingResponseIDs/ResponseID')
-    # end
 
   end
 
