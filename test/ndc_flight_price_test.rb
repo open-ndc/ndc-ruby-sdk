@@ -154,7 +154,7 @@ class NDCFlightPriceTest < Test::Unit::TestCase
                       Flight: [
                           {
                               Departure: {
-                                  AirportCode: 'SFX',
+                                  AirportCode: 'SXF',
                                   Date: '2016-04-01',
                                   Time: '20:30'
                               },

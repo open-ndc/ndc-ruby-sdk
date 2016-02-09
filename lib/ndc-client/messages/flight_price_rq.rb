@@ -21,13 +21,17 @@ module NDCClient
                         xml.Departure {
                           xml.AirportCode_ flight.hpath('Departure/AirportCode')
                           xml.Date_ flight.hpath('Departure/Date')
-                          xml.Time_ flight.hpath('Departure/Time')
+                          if (time = flight.hpath('Departure/Time')).present?
+                            xml.Time_(time)
+                          end
                           xml.AirportName_ flight.hpath('Departure/AirportName')
                         }
                         xml.Arrival {
                           xml.AirportCode_ flight.hpath('Arrival/AirportCode')
                           xml.Date_ flight.hpath('Arrival/Date')
-                          xml.Time_ flight.hpath('Arrival/Time')
+                          if (time = flight.hpath('Arrival/Time')).present?
+                            xml.Time_(time)
+                          end
                           xml.AirportName_ flight.hpath('Arrival/AirportName')
                         }
                         xml.MarketingCarrier {
