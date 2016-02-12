@@ -1,4 +1,4 @@
-require 'test_helper'
+require_relative 'test_helper'
 
 class NDCSeatAvailabilityTest < Test::Unit::TestCase
   extend Minitest::Spec::DSL
@@ -126,7 +126,7 @@ class NDCSeatAvailabilityTest < Test::Unit::TestCase
     end
 
     test "Response includes Success element" do
-      refute_nil @@ndc_response["SeatAvailabilityRS"].has_key?("Success")
+      refute_nil @@ndc_response.deep_symbolize_keys![:SeatAvailabilityRS].has_key?("Success")
     end
 
   end

@@ -1,4 +1,4 @@
-require 'test_helper'
+require_relative 'test_helper'
 
 class NDCServiceListTest < Test::Unit::TestCase
   extend Minitest::Spec::DSL
