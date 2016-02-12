@@ -202,6 +202,11 @@ class NDCFlightPriceTest < Test::Unit::TestCase
       assert_equal @@ndc_response.hpath('FlightPriceRS/Document/MessageVersion'), "15.2"
     end
 
+    test "ShoppingResponseIDs is ok" do
+      refute_empty @@ndc_response.hpath('FlightPriceRS/ShoppingResponseIDs')
+      refute_empty @@ndc_response.hpath('FlightPriceRS/ShoppingResponseIDs/ResponseID')
+    end
+
   end
 
 end
