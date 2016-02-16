@@ -5,12 +5,12 @@ class NDCOrderCancelTest < Test::Unit::TestCase
 
   describe "Sends an valid OrderCancel request" do
 
-    @@ndc_client = NDCClient::Base.new(@@ndc_config)
+    @ndc_client = NDCClient::Base.new(@@ndc_config)
 
-    # @@ndc_response = @@ndc_client.request(:AirShopping, NDCAirShoppingTest::VALID_REQUEST_PARAMS)
+    # @@ndc_response = @ndc_client.request(:AirShopping, NDCAirShoppingTest::VALID_REQUEST_PARAMS)
     # @response_id = @@ndc_response.hpath('AirShoppingRS/ShoppingResponseIDs/ResponseID')
     #
-    # @@ndc_response = @@ndc_client.request(:OrderCancel, query_params)
+    # @@ndc_response = @ndc_client.request(:OrderCancel, query_params)
     #
     # puts "DEBUG ::: @@ndc_response[:OrderViewRS][:Order] -> #{@@ndc_response[:OrderViewRS][:Order]}"
     #
@@ -24,10 +24,10 @@ class NDCOrderCancelTest < Test::Unit::TestCase
     #   }
     # }
 
-    # @@ndc_response = @@ndc_client.request(:OrderCancel, query_params)
+    # @@ndc_response = @ndc_client.request(:OrderCancel, query_params)
     #
     # test "OrderCancel response is valid" do
-    #   assert @@ndc_client.valid_response?
+    #   assert @ndc_client.valid?
     # end
     #
     # test "MessageVersion is ok" do

@@ -5,9 +5,8 @@ class NDCSeatAvailabilityTest < Test::Unit::TestCase
 
   describe "Sends an valid SeatAvailability request" do
 
-    @@ndc_client = NDCClient::Base.new(@@ndc_config)
-
-    query_params = {
+    let(:query_params) {
+    {
       Query: {
         OriginDestination: {
           OriginDestinationReferences: 'OD1'
@@ -112,21 +111,26 @@ class NDCSeatAvailabilityTest < Test::Unit::TestCase
           }
         ]
       }
-    }
+    }}
 
-    @@ndc_response = @@ndc_client.request(:SeatAvailability, query_params)
+
+    setup do
+      @ndc_client = NDCClient::Base.new(@@ndc_config)
+      @ndc_response = @ndc_client.request(:SeatAvailability, query_params)
+      @ndc_parsed_response = @ndc_response.parsed_response
+    end
 
     test "SeatAvailability request is valid" do
-      assert @@ndc_client.valid_response?
+      assert @ndc_response.valid?
     end
 
     test "MessageVersion is ok" do
-      refute_empty @@ndc_response.hpath('SeatAvailabilityRS/Document')
-      assert_equal @@ndc_response.hpath('SeatAvailabilityRS/Document/MessageVersion'), "15.2"
+      refute_empty @ndc_parsed_response.hpath('SeatAvailabilityRS/Document')
+      assert_equal @ndc_parsed_response.hpath('SeatAvailabilityRS/Document/MessageVersion'), "15.2"
     end
 
     test "Response includes Success element" do
-      refute_nil @@ndc_response.deep_symbolize_keys![:SeatAvailabilityRS].has_key?("Success")
+      refute_nil @ndc_parsed_response.hpath('SeatAvailabilityRS/Success')
     end
 
   end

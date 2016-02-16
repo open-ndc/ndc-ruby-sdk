@@ -5,10 +5,16 @@ class NDCOrderCreateTest < Test::Unit::TestCase
 
   describe "Sends an valid OrderCreate request" do
 
-    @@ndc_client = NDCClient::Base.new(@@ndc_config)
+    setup do
+      @ndc_client = NDCClient::Base.new(@@ndc_config)
+      @ndc_response = @ndc_client.request(:AirShopping, NDCAirShoppingTest::VALID_REQUEST_PARAMS)
+      if @ndc_response.valid?
+        @response_id = @ndc_response.parsed_response.hpath('AirShoppingRS/ShoppingResponseIDs/ResponseID')
+      else
+        raise
+      end
+    end
 
-    @@ndc_response = @@ndc_client.request(:AirShopping, NDCAirShoppingTest::VALID_REQUEST_PARAMS)
-    @response_id = @@ndc_response.hpath('AirShoppingRS/ShoppingResponseIDs/ResponseID')
 
     query_params = {
       Query: {
@@ -214,10 +220,10 @@ class NDCOrderCreateTest < Test::Unit::TestCase
     }
 
     # Test disabled until full server compliancy
-    # @@ndc_response = @@ndc_client.request(:OrderCreate, query_params)
+    # @@ndc_response = @ndc_client.request(:OrderCreate, query_params)
     #
     # test "OrderCreate response is valid" do
-    #   assert @@ndc_client.valid_response?
+    #   assert @ndc_client.valid?
     # end
     #
     # test "MessageVersion is ok" do

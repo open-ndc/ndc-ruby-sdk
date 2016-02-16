@@ -5,7 +5,7 @@ class NDCOrderRetrieveTest < Test::Unit::TestCase
 
   describe "Sends an valid OrderRetrieve request" do
 
-    @@ndc_client = NDCClient::Base.new(@@ndc_config)
+    @ndc_client = NDCClient::Base.new(@@ndc_config)
 
     #TODO Should take OrderId from a CreateOrder Request
 
@@ -21,10 +21,10 @@ class NDCOrderRetrieveTest < Test::Unit::TestCase
     }
 
     # Test disabled until full server compliancy
-    # @@ndc_response = @@ndc_client.request(:OrderRetrieve, query_params)
+    # @@ndc_response = @ndc_client.request(:OrderRetrieve, query_params)
     #
     # test "OrderRetrieve response is valid" do
-    #   assert @@ndc_client.valid_response?
+    #   assert @ndc_client.valid?
     # end
     #
     # test "MessageVersion is ok" do
