@@ -31,26 +31,26 @@ class NDCServicePriceTest < Test::Unit::TestCase
       }
     }
 
-    setup do
-      @ndc_client = NDCClient::Base.new(@@ndc_config)
-      @ndc_response = @ndc_client.request(:AirShopping, airshopping_valid_query_params)
-      @response_id = @ndc_response.parsed_response.hpath('AirShoppingRS/ShoppingResponseIDs/ResponseID')
-      @ndc_parsed_response = @ndc_response.parsed_response
-    end
-
-    test "ServicePrice response is valid" do
-      @ndc_response = @ndc_client.request(:ServicePrice, valid_query_params)
-      assert @ndc_response.valid?
-    end
-
-    test "MessageVersion is present" do
-      refute_nil @ndc_parsed_response.hpath('ServicePriceRS/Document')
-      refute_nil @ndc_parsed_response.hpath('ServicePriceRS/Document/MessageVersion')
-    end
-
-    test "Response includes Success element" do
-      refute_nil @ndc_parsed_response.hpath('ServicePriceRS/Success')
-    end
+    # setup do
+    #   @ndc_client = NDCClient::Base.new(@@ndc_config)
+    #   @ndc_response = @ndc_client.request(:AirShopping, airshopping_valid_query_params)
+    #   @response_id = @ndc_response.parsed_response.hpath('AirShoppingRS/ShoppingResponseIDs/ResponseID')
+    #   @ndc_parsed_response = @ndc_response.parsed_response
+    # end
+    #
+    # test "ServicePrice response is valid" do
+    #   @ndc_response = @ndc_client.request(:ServicePrice, valid_query_params)
+    #   assert @ndc_response.valid?
+    # end
+    #
+    # test "MessageVersion is present" do
+    #   refute_nil @ndc_parsed_response.hpath('ServicePriceRS/Document')
+    #   refute_nil @ndc_parsed_response.hpath('ServicePriceRS/Document/MessageVersion')
+    # end
+    #
+    # test "Response includes Success element" do
+    #   refute_nil @ndc_parsed_response.hpath('ServicePriceRS/Success')
+    # end
 
   end
 
