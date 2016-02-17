@@ -44,12 +44,12 @@ class NDCServicePriceTest < Test::Unit::TestCase
     end
 
     test "MessageVersion is present" do
-      refute_nil @ndc_parsed_response.hpath('ServicePriceRS/Document')
-      refute_nil @ndc_parsed_response.hpath('ServicePriceRS/Document/MessageVersion')
+      refute_nil @ndc_parsed_response.hpath("ServicePriceRS/Document")
+      refute_nil @ndc_parsed_response.hpath("ServicePriceRS/Document/MessageVersion")
     end
 
     test "Response includes Success element" do
-      refute_nil @ndc_parsed_response.hpath('ServicePriceRS/Success')
+      assert @ndc_parsed_response.hpath("ServicePriceRS").has_key?(:Success)
     end
 
   end
