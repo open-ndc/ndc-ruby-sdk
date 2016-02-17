@@ -100,7 +100,7 @@ class NDCAirShoppingTest < Test::Unit::TestCase
     end
 
     test "Response includes Success element" do
-      refute_nil @ndc_parsed_response.deep_symbolize_keys![:AirShoppingRS].has_key?("Success")
+      assert @ndc_parsed_response.hpath("AirShoppingRS").has_key?(:Success)
     end
 
     test "MessageVersion is ok" do
