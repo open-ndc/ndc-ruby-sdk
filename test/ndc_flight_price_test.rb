@@ -64,7 +64,7 @@ class NDCFlightPriceTest < Test::Unit::TestCase
 
   describe "Sends a valid FlightPrice request" do
 
-    let(:valid_query_params) do
+    let(:detailed_valid_query_params) do
       {
         Query: {
           OriginDestination: [
@@ -143,7 +143,7 @@ class NDCFlightPriceTest < Test::Unit::TestCase
       }
     end
 
-    let(:valid_query_params_too) do
+    let(:valid_query_params) do
       {
         Query: {
           OriginDestination: [
@@ -186,7 +186,7 @@ class NDCFlightPriceTest < Test::Unit::TestCase
 
     setup do
       @ndc_client = NDCClient::Base.new(@@ndc_config)
-      @ndc_response = @ndc_client.request(:FlightPrice, valid_query_params_too)
+      @ndc_response = @ndc_client.request(:FlightPrice, valid_query_params)
       @ndc_parsed_response = @ndc_response.parsed_response
     end
 
@@ -200,7 +200,7 @@ class NDCFlightPriceTest < Test::Unit::TestCase
     end
 
     test "Response includes Success element" do
-      refute_nil @ndc_parsed_response.deep_symbolize_keys![:FlightPriceRS].has_key?("Success")
+      assert @ndc_parsed_response.hpath("FlightPriceRS").has_key?(:Success)
     end
 
   end
