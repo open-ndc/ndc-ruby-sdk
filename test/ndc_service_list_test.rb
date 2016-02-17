@@ -1,34 +1,85 @@
-require 'test_helper'
+require_relative 'test_helper'
 
 class NDCServiceListTest < Test::Unit::TestCase
   extend Minitest::Spec::DSL
 
-  describe "Sends an valid ServiceList request" do
+  setup do
+    @ndc_client = NDCClient::Base.new(@@ndc_config)
+  end
 
-    @@ndc_client = NDCClient::Base.new(@@ndc_config)
+  describe "Sends an invalid ServiceList request (random ShoppingResponseID)" do
 
-    @@ndc_response = @@ndc_client.request(:AirShopping, NDCAirShoppingTest::VALID_REQUEST_PARAMS)
-    @response_id = @@ndc_response.hpath('AirShoppingRS/ShoppingResponseIDs/ResponseID')
+    let(:response_id) {Digest::MD5.new.hexdigest}
 
-    query_params = {
-      ShoppingResponseIDs: {
-        ResponseID: @response_id
+    let(:query_params) {
+      {
+        ShoppingResponseIDs: {
+          ResponseID: response_id
+        }
       }
     }
 
-    @@ndc_response = @@ndc_client.request(:ServiceList, query_params)
+    test "ServiceList response is invalid" do
+      assert_raise NDCClient::NDCErrors::NDCInvalidServerResponse do
+        ndc_response = @ndc_client.request(:ServiceList, query_params)
+      end
+    end
 
-    test "ServiceList response is valid" do
-      assert @@ndc_client.valid_response?
+  end
+
+  describe "Sends an valid ServiceList request" do
+
+    let(:airshopping_valid_query_params) do
+      {
+        CoreQuery: {
+          OriginDestinations: {
+            OriginDestination: {
+              Departure: {
+                AirportCode: 'SXF',
+                Date: '2016-03-01'
+              },
+              Arrival: {
+                AirportCode: 'MAD'
+              }
+            }
+          }
+        }
+      }
+    end
+
+    let(:valid_query_params) do
+      {
+        ShoppingResponseIDs: {
+          ResponseID: @response_id
+        }
+      }
+    end
+
+    setup do
+      # Gets a valid ShoppingResponseID from an AirShoppingRS
+      @ndc_response = @ndc_client.request(:AirShopping, airshopping_valid_query_params)
+      @response_id = @ndc_response.parsed_response.hpath('AirShoppingRS/ShoppingResponseIDs/ResponseID')
+      @ndc_response = @ndc_client.request(:ServiceList, valid_query_params)
+      @ndc_parsed_response = @ndc_response.parsed_response
+    end
+
+
+    test "Get aServiceList response is valid" do
+      @ndc_response = @ndc_client.request(:ServiceList, valid_query_params)
+      assert @ndc_response.valid?
     end
 
     test "MessageVersion is ok" do
-      refute_empty @@ndc_response.hpath('ServiceListRS/Document')
-      assert_equal @@ndc_response.hpath('ServiceListRS/Document/MessageVersion'), "15.2"
+      refute_empty @ndc_parsed_response.hpath('ServiceListRS/Document')
+      assert_equal @ndc_parsed_response.hpath('ServiceListRS/Document/MessageVersion'), "15.2"
     end
 
     test "Response includes Success element" do
-      refute_nil @@ndc_response["ServiceListRS"].has_key?("Success")
+      assert @ndc_parsed_response.hpath("ServiceListRS").has_key?(:Success)
+    end
+
+    test "Response includes ServiceList listing" do
+      assert @ndc_parsed_response.hpath("ServiceListRS/DataLists").has_key?(:ServiceList)
     end
 
   end

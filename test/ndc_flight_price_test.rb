@@ -1,21 +1,84 @@
-require 'test_helper'
+require_relative 'test_helper'
 
 class NDCFlightPriceTest < Test::Unit::TestCase
   extend Minitest::Spec::DSL
 
   describe "Sends an invalid FlightPrice request" do
 
-    @@ndc_client = NDCClient::Base.new(@@ndc_config)
+    let(:invalid_query_params) do
+      {
+        Query: {
+          OriginDestination: [
+            {
+              Flight: {
+                Departure: {
+                  AirportCode: 'ARN',
+                  Date: '2016-05-05',
+                  Time: '06:00'
+                },
+                MarketingCarrier: {
+                  AirlineID: "C9",
+                  Name: "Kronos Air",
+                  FlightNumber: "809"
+                },
+                OperatingCarrier: {
+                  AirlineID: "C9",
+                  Name: "Kronos Air",
+                  FlightNumber: "809"
+                },
+                Equipment: {
+                  AircraftCode: "32A",
+                  Name: ""
+                },
+                CabinType: {
+                  Code: "M",
+                  Definition: "Economy/coach discounted"
+                }
+              }
+            }
+          ]
+        },
+        DataLists: {
+          OriginDestinationList: {
+            OriginDestination: {
+                DepartureCode: "ARN",
+                ArrivalCode: "RIX"
+            }
+          }
+        }
+      }
+    end
 
-    invalid_query_params = {
-      Query: {
-        OriginDestination: [
-          {
-            Flight: {
+    setup do
+      @ndc_client = NDCClient::Base.new(@@ndc_config)
+    end
+
+    test "Flight requires arrival deltails" do
+      assert_raises(NDCClient::NDCErrors::NDCInvalidServerResponse) {
+        @ndc_client.request(:FlightPrice, invalid_query_params)
+      }
+    end
+
+  end
+
+
+  describe "Sends a valid FlightPrice request" do
+
+    let(:detailed_valid_query_params) do
+      {
+        Query: {
+          OriginDestination: [
+            { Flight: [{
               Departure: {
                 AirportCode: 'ARN',
                 Date: '2016-05-05',
                 Time: '06:00'
+              },
+              Arrival: {
+                AirportCode: 'FRA',
+                Date: '2016-05-05',
+                Time: '08:10',
+                AirportName: 'Frankfurt International'
               },
               MarketingCarrier: {
                 AirlineID: "C9",
@@ -35,129 +98,110 @@ class NDCFlightPriceTest < Test::Unit::TestCase
                 Code: "M",
                 Definition: "Economy/coach discounted"
               }
+            }]},
+            { Flight: [{
+              Departure: {
+                AirportCode: 'FRA',
+                Date: '2016-05-05',
+                Time: '09:50'
+              },
+              Arrival: {
+                AirportCode: 'RIX',
+                Date: '2016-05-05',
+                Time: '15:55',
+                AirportName: 'Riga International'
+              },
+              MarketingCarrier: {
+                AirlineID: "C9",
+                Name: "Kronos Air",
+                FlightNumber: "890"
+              },
+              OperatingCarrier: {
+                AirlineID: "C9",
+                Name: "Kronos Air",
+                FlightNumber: "890"
+              },
+              Equipment: {
+                AircraftCode: "321",
+                Name: "321 - AIRBUS INDUSTRIE A321 JET"
+              },
+              CabinType: {
+                Code: "M",
+                Definition: "Economy/coach discounted"
+              }
+            }]}
+          ]
+        },
+        DataLists: {
+          OriginDestinationList: {
+            OriginDestination: {
+                DepartureCode: "ARN",
+                ArrivalCode: "RIX"
             }
           }
-        ]
-      },
-      DataLists: {
-        OriginDestinationList: {
-          OriginDestination: {
-              DepartureCode: "ARN",
-              ArrivalCode: "RIX"
-          }
         }
-      }
-    }
-
-    test "Flight requires arrival deltails" do
-      assert_raises(NDCClient::NDCErrors::NDCInvalidServerResponse) {
-        @@ndc_response = @@ndc_client.request(:FlightPrice, invalid_query_params)
       }
     end
 
-  end
-
-
-  describe "Sends a valid FlightPrice request" do
-
-    @@ndc_client = NDCClient::Base.new(@@ndc_config)
-
-    query_params = {
-      Query: {
-        OriginDestination: [
-          { Flight: {
-            Departure: {
-              AirportCode: 'ARN',
-              Date: '2016-05-05',
-              Time: '06:00'
+    let(:valid_query_params) do
+      {
+        Query: {
+          OriginDestination: [
+            {
+              Flight: [
+                {
+                  Departure: {
+                      AirportCode: 'SXF',
+                      Date: '2016-04-01',
+                      Time: '20:30'
+                  },
+                  Arrival: {
+                      AirportCode: 'MAD',
+                      Date: '2016-04-02',
+                      Time: '23:10'
+                  },
+                  MarketingCarrier: {
+                      AirlineID: 'id',
+                      FlightNumber: '1'
+                  },
+                  OperatingCarrier: {
+                      AirlineID: 'id',
+                      FlightNumber: '1'
+                  },
+                  Equipment: {
+                      AircraftCode: '333'
+                  },
+                  CabinType: {
+                      Code: 'M'
+                  }
+                }
+              ]
             },
-            Arrival: {
-              AirportCode: 'FRA',
-              Date: '2016-05-05',
-              Time: '08:10',
-              AirportName: 'Frankfurt International'
-            },
-            MarketingCarrier: {
-              AirlineID: "C9",
-              Name: "Kronos Air",
-              FlightNumber: "809"
-            },
-            OperatingCarrier: {
-              AirlineID: "C9",
-              Name: "Kronos Air",
-              FlightNumber: "809"
-            },
-            Equipment: {
-              AircraftCode: "32A",
-              Name: ""
-            },
-            CabinType: {
-              Code: "M",
-              Definition: "Economy/coach discounted"
-            }
-          }},
-          { Flight: {
-            Departure: {
-              AirportCode: 'FRA',
-              Date: '2016-05-05',
-              Time: '09:50'
-            },
-            Arrival: {
-              AirportCode: 'RIX',
-              Date: '2016-05-05',
-              Time: '15:55',
-              AirportName: 'Riga International'
-            },
-            MarketingCarrier: {
-              AirlineID: "C9",
-              Name: "Kronos Air",
-              FlightNumber: "890"
-            },
-            OperatingCarrier: {
-              AirlineID: "C9",
-              Name: "Kronos Air",
-              FlightNumber: "890"
-            },
-            Equipment: {
-              AircraftCode: "321",
-              Name: "321 - AIRBUS INDUSTRIE A321 JET"
-            },
-            CabinType: {
-              Code: "M",
-              Definition: "Economy/coach discounted"
-            }
-          }}
-        ]
-      },
-      DataLists: {
-        OriginDestinationList: {
-          OriginDestination: {
-              DepartureCode: "ARN",
-              ArrivalCode: "RIX"
-          }
+          ]
         }
       }
-    }
+    end
 
-    @@ndc_response = @@ndc_client.request(:FlightPrice, query_params)
+
+
+    setup do
+      @ndc_client = NDCClient::Base.new(@@ndc_config)
+      @ndc_response = @ndc_client.request(:FlightPrice, valid_query_params)
+      @ndc_parsed_response = @ndc_response.parsed_response
+    end
 
     test "FlightPrice request is valid" do
-      assert @@ndc_client.valid_response?
+      assert @ndc_response.valid?
+    end
+
+    test "ShoppingResponseIDs is ok" do
+      refute_empty @ndc_parsed_response.hpath('FlightPriceRS/ShoppingResponseIDs')
+      refute_empty @ndc_parsed_response.hpath('FlightPriceRS/ShoppingResponseIDs/ResponseID')
     end
 
     test "Response includes Success element" do
-      refute_nil @@ndc_response["FlightPriceRS"].has_key?("Success")
+      assert @ndc_parsed_response.hpath("FlightPriceRS").has_key?(:Success)
     end
-
-    test "MessageVersion is ok" do
-      refute_empty @@ndc_response.hpath('FlightPriceRS/Document')
-      assert_equal @@ndc_response.hpath('FlightPriceRS/Document/MessageVersion'), "15.2"
-    end
-
-    # test "ShoppingResponseIDs is ok" do
-    #   refute_empty @@ndc_response.hpath('FlightPriceRS/ShoppingResponseIDs')
-    #   refute_empty @@ndc_response.hpath('FlightPriceRS/ShoppingResponseIDs/ResponseID')
-    # end
 
   end
 

@@ -37,7 +37,7 @@ module NDCClient
     end
 
     def request(method, params)
-      raise NDCErrors::NDCUnsupportedMethod unless ACCEPTABLE_NDC_METHODS[method].present?
+      raise NDCErrors::NDCUnsupportedMethod.new("Not a valid NDC method") unless ACCEPTABLE_NDC_METHODS[method].present?
       @method = method
       @request_name = ACCEPTABLE_NDC_METHODS[method].first.to_s
       @response_name = ACCEPTABLE_NDC_METHODS[method].last.to_s
@@ -46,12 +46,14 @@ module NDCClient
       if @status == :status_ok
         parse_response!
         if @parsed_response.hpath(@response_name).present? && @parsed_response.hpath("#{@response_name}/Errors").nil?
-          return @parsed_response
+          return self
         else
-          raise NDCErrors::NDCInvalidResponseFormat, "Expecting a valid #{@response_name}. Errors: #{@parsed_response.hpath("#{@response_name}/Errors")}"
+          raise NDCErrors::NDCInvalidResponseFormat.new(400, "Expecting a valid #{@response_name}. Errors: #{@parsed_response.hpath("#{@response_name}/Errors")}")
+          return self
         end
       else
-        raise NDCErrors::NDCInvalidServerResponse, "Expecting HTTP Status OK but retuned: #{@status_code}"
+        raise NDCErrors::NDCInvalidServerResponse.new("Expecting HTTP Status OK but retuned: #{@response_code}")
+        return self
       end
     end
 
@@ -67,7 +69,7 @@ module NDCClient
       @parsed_response
     end
 
-    def valid_response?
+    def valid?
       @status == :status_ok && @parsed_response["Errors"].nil?
     end
 
@@ -78,22 +80,24 @@ module NDCClient
       begin
         @status = :request_sent
         @response = @client.post message.to_xml, DEFAULT_HEADERS.merge({'Authorization-Key' => @rest_config['headers']['Authorization-Key']})
-        @status_code = @response.code
-        @status = :status_ok if @response.code == 200
+        @status = :status_ok # Otherwise raises exception
         return @response
-      rescue RestClient::ExceptionWithResponse => error
-        @status = :request_error
-        @error = error
-        return @error
+      rescue RestClient::ExceptionWithResponse => exception
+        @status = :status_wrong
+        @response = exception.response
+        @exception = exception
+        return @exception
+      ensure
+        @response_code = @response.code
       end
     end
 
-    def soap_call_with_message(method, message)
-      @method = method
-      @status = :request_sent
-      @response = @client.call(method, message: message.to_xml_with_body_wrap)
-      @status = :request_complete
-    end
+    # def soap_call_with_message(method, message)
+    #   @method = method
+    #   @status = :request_sent
+    #   @response = @client.call(method, message: message.to_xml_with_body_wrap)
+    #   @status = :status_ok
+    # end
 
     def parse_response!
       parser = Nori.new

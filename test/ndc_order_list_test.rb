@@ -1,11 +1,11 @@
-require 'test_helper'
+require_relative 'test_helper'
 
 class NDCOrderListTest < Test::Unit::TestCase
   extend Minitest::Spec::DSL
 
   describe "Sends an valid OrderList request" do
 
-    @@ndc_client = NDCClient::Base.new(@@ndc_config)
+    @ndc_client = NDCClient::Base.new(@@ndc_config)
 
     #TODO Should take OrderId from a CreateOrder Request
 
@@ -20,10 +20,10 @@ class NDCOrderListTest < Test::Unit::TestCase
     }
 
     # Test disabled until full server compliancy
-    # @@ndc_response = @@ndc_client.request(:OrderList, query_params)
+    # @@ndc_response = @ndc_client.request(:OrderList, query_params)
     #
     # test "OrderList response is valid" do
-    #   assert @@ndc_client.valid_response?
+    #   assert @ndc_client.valid?
     # end
     #
     # test "MessageVersion is ok" do

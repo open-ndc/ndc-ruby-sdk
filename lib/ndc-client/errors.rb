@@ -2,29 +2,24 @@ module NDCClient
 
   module NDCErrors
 
-    class NDCUnsupportedMethod < RuntimeError; end
-    class NDCUnknownMethod < RuntimeError; end
-    class NDCInvalidServerResponse < RuntimeError; end
-    class NDCInvalidResponseFormat < EncodingError; end
-    class NDCWrongBodyWrapping < EncodingError; end
-    class NDCParseError < EncodingError; end
+    class NDCError < RuntimeError
+      attr_accessor :message
 
-    class NDCError < StandardError
-      attr_accessor :code, :message
-
-      def initialize(code, message)
-        self.code = code
+      def initialize(message)
         self.message = message
       end
 
-      def code=(new_code)
-        @code = new_code.to_i
-      end
-
       def to_s
-        "#{code}: #{message}"
+        @message
       end
     end
+
+    class NDCUnsupportedMethod < NDCError; end
+    class NDCUnknownMethod < NDCError; end
+    class NDCInvalidServerResponse < NDCError; end
+    class NDCInvalidResponseFormat < NDCError; end
+    class NDCWrongBodyWrapping < NDCError; end
+    class NDCParseError < NDCError; end
 
   end
 
