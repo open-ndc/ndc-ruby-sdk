@@ -75,11 +75,11 @@ class NDCServiceListTest < Test::Unit::TestCase
     end
 
     test "Response includes Success element" do
-      assert_true @ndc_parsed_response.hpath["ServiceListRS"].has_key?("Success")
+      assert @ndc_parsed_response.hpath("ServiceListRS").has_key?(:Success)
     end
 
     test "Response includes ServiceList listing" do
-      refute_empty @ndc_parsed_response.hpath["ServiceListRS/DataLists"].has_key?("ServiceList")
+      assert @ndc_parsed_response.hpath("ServiceListRS/DataLists").has_key?(:ServiceList)
     end
 
   end

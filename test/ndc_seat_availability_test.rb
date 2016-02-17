@@ -129,9 +129,9 @@ class NDCSeatAvailabilityTest < Test::Unit::TestCase
       refute_empty @ndc_parsed_response.hpath('SeatAvailabilityRS/Document/MessageVersion')
     end
 
-    # test "Response includes Success element" do
-    #   refute_nil @ndc_parsed_response.hpath('SeatAvailabilityRS/Success')
-    # end
+    test "Response includes Success element" do
+      assert @ndc_parsed_response.hpath("SeatAvailabilityRS").has_key?(:Success)
+    end
 
   end
 

@@ -200,7 +200,7 @@ class NDCFlightPriceTest < Test::Unit::TestCase
     end
 
     test "Response includes Success element" do
-      refute_nil @ndc_parsed_response.deep_symbolize_keys![:FlightPriceRS].has_key?("Success")
+      assert @ndc_parsed_response.hpath("FlightPriceRS").has_key?(:Success)
     end
 
   end
