@@ -49,7 +49,7 @@ class NDCServicePriceTest < Test::Unit::TestCase
     # end
     #
     # test "Response includes Success element" do
-    #   assert @ndc_parsed_response.hpath("ServicePriceRS").has_key?(:Success)
+    #   assert @ndc_parsed_response.hpath?("ServicePriceRS/Success")
     # end
 
   end

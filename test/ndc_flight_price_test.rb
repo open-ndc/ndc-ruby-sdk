@@ -195,12 +195,12 @@ class NDCFlightPriceTest < Test::Unit::TestCase
     end
 
     test "ShoppingResponseIDs is ok" do
-      refute_empty @ndc_parsed_response.hpath('FlightPriceRS/ShoppingResponseIDs')
-      refute_empty @ndc_parsed_response.hpath('FlightPriceRS/ShoppingResponseIDs/ResponseID')
+      assert @ndc_parsed_response.hpath?('FlightPriceRS/ShoppingResponseIDs')
+      assert @ndc_parsed_response.hpath?('FlightPriceRS/ShoppingResponseIDs/ResponseID')
     end
 
     test "Response includes Success element" do
-      assert @ndc_parsed_response.hpath("FlightPriceRS").has_key?(:Success)
+      assert @ndc_parsed_response.hpath?("FlightPriceRS/Success")
     end
 
   end

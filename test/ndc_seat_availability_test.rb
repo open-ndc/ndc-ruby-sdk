@@ -130,7 +130,7 @@ class NDCSeatAvailabilityTest < Test::Unit::TestCase
     end
 
     test "Response includes Success element" do
-      assert @ndc_parsed_response.hpath("SeatAvailabilityRS").has_key?(:Success)
+      assert @ndc_parsed_response.hpath?("SeatAvailabilityRS/Success")
     end
 
   end

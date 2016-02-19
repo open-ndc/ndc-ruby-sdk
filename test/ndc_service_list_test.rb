@@ -70,16 +70,16 @@ class NDCServiceListTest < Test::Unit::TestCase
     end
 
     test "MessageVersion is ok" do
-      refute_empty @ndc_parsed_response.hpath('ServiceListRS/Document')
-      assert_equal @ndc_parsed_response.hpath('ServiceListRS/Document/MessageVersion'), "15.2"
+      assert @ndc_parsed_response.hpath?('ServiceListRS/Document')
+      assert @ndc_parsed_response.hpath?('ServiceListRS/Document/MessageVersion'), "15.2"
     end
 
     test "Response includes Success element" do
-      assert @ndc_parsed_response.hpath("ServiceListRS").has_key?(:Success)
+      assert @ndc_parsed_response.hpath?("ServiceListRS/Success")
     end
 
     test "Response includes ServiceList listing" do
-      assert @ndc_parsed_response.hpath("ServiceListRS/DataLists").has_key?(:ServiceList)
+      assert @ndc_parsed_response.hpath?("ServiceListRS/DataLists/ServiceList")
     end
 
   end

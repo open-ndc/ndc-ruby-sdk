@@ -100,22 +100,22 @@ class NDCAirShoppingTest < Test::Unit::TestCase
     end
 
     test "Response includes Success element" do
-      assert @ndc_parsed_response.hpath("AirShoppingRS").has_key?(:Success)
+      assert @ndc_parsed_response.hpath?("AirShoppingRS/Success")
     end
 
     test "MessageVersion is ok" do
-      refute_empty @ndc_parsed_response.hpath('AirShoppingRS/Document')
-      assert_equal @ndc_parsed_response.hpath('AirShoppingRS/Document/MessageVersion'), "15.2"
+      assert @ndc_parsed_response.hpath?('AirShoppingRS/Document')
+      assert @ndc_parsed_response.hpath?('AirShoppingRS/Document/MessageVersion'), "15.2"
     end
 
     test "ShoppingResponseIDs is ok" do
-      refute_empty @ndc_parsed_response.hpath('AirShoppingRS/ShoppingResponseIDs')
-      refute_empty @ndc_parsed_response.hpath('AirShoppingRS/ShoppingResponseIDs/ResponseID')
+      assert @ndc_parsed_response.hpath?('AirShoppingRS/ShoppingResponseIDs')
+      assert @ndc_parsed_response.hpath?('AirShoppingRS/ShoppingResponseIDs/ResponseID')
     end
 
     test "Airline Offer is present" do
-      refute_empty @ndc_parsed_response.hpath('AirShoppingRS/OffersGroup/AirlineOffers')
-      refute_empty @ndc_parsed_response.hpath('AirShoppingRS/OffersGroup/AirlineOffers/TotalOfferQuantity')
+      assert @ndc_parsed_response.hpath?('AirShoppingRS/OffersGroup/AirlineOffers')
+      assert @ndc_parsed_response.hpath?('AirShoppingRS/OffersGroup/AirlineOffers/TotalOfferQuantity')
     end
 
     test "Airline Offers expiration are valid" do
