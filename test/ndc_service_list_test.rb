@@ -64,14 +64,13 @@ class NDCServiceListTest < Test::Unit::TestCase
     end
 
 
-    test "Get aServiceList response is valid" do
-      @ndc_response = @ndc_client.request(:ServiceList, valid_query_params)
+    test "Get ServiceList response is valid" do
       assert @ndc_response.valid?
     end
 
     test "MessageVersion is ok" do
       assert @ndc_parsed_response.hpath?('ServiceListRS/Document')
-      assert @ndc_parsed_response.hpath?('ServiceListRS/Document/MessageVersion'), "15.2"
+      assert @ndc_parsed_response.hpath?('ServiceListRS/Document/MessageVersion')
     end
 
     test "Response includes Success element" do
