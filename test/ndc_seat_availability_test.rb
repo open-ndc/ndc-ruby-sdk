@@ -16,8 +16,8 @@ class NDCSeatAvailabilityTest < Test::Unit::TestCase
         OriginDestinationList: {
           OriginDestination: {
             _OriginDestinationKey: 'OD1',
-            DepartureCode: "ARN",
-            ArrivalCode: "RIX"
+            DepartureCode: "SXF",
+            ArrivalCode: "MAD"
           }
         },
         FlightList: [
@@ -36,29 +36,29 @@ class NDCSeatAvailabilityTest < Test::Unit::TestCase
             FlightSegment: {
               _SegmentKey: "SEG1",
               Departure: {
-                AirportCode: "ARN",
-                Date: "2016-05-05",
+                AirportCode: "SXF",
+                Date: "2016-03-01",
                 Time: "06:00"
               },
               Arrival: {
-                AirportCode: "FRA",
-                Date: "2016-05-05",
+                AirportCode: "MAD",
+                Date: "2016-03-01",
                 Time: "08:10",
-                AirportName: "Frankfurt International"
+                AirportName: "Madrid Adolfo Suárez International Airport"
               },
               MarketingCarrier: {
-                AirlineID: "C9",
+                AirlineID: "FA",
                 Name: "Kronos Air",
                 FlightNumber: "809"
               },
               OperatingCarrier: {
-                AirlineID: "C9",
+                AirlineID: "FA",
                 Name: "Kronos Air",
                 FlightNumber: "809"
               },
               Equipment: {
-                AircraftCode: "32A",
-                Name: ""
+                AircraftCode: "31F",
+                Name: "E95 EMBRAER 195 JET"
               },
               ClassOfService: {
                 Code: "M"
@@ -74,29 +74,29 @@ class NDCSeatAvailabilityTest < Test::Unit::TestCase
             FlightSegment: {
               _SegmentKey: "SEG2",
               Departure: {
-                AirportCode: "FRA",
+                AirportCode: "SXF",
                 Date: "2016-05-05",
                 Time: "09:50",
-                AirportName: "Frankfurt International"
+                AirportName: "Berlin Schönefeld"
               },
               Arrival: {
-                AirportCode: "RIX",
+                AirportCode: "MAD",
                 Date: "2016-05-05",
                 Time: "12:55",
-                AirportName: "Riga International"
+                AirportName: "Madrid Adolfo Suárez International Airport"
               },
               MarketingCarrier: {
-                AirlineID: "C9",
+                AirlineID: "FA",
                 Name: "Kronos Air",
                 FlightNumber: "890"
               },
               OperatingCarrier: {
-                AirlineID: "C9",
+                AirlineID: "FA",
                 Name: "Kronos Air",
                 FlightNumber: "890"
               },
               Equipment: {
-                AircraftCode: "321",
+                AircraftCode: "31F",
                 Name: "321 - AIRBUS INDUSTRIE A321 JET"
               },
               ClassOfService: {
