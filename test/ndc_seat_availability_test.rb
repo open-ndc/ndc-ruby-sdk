@@ -38,12 +38,12 @@ class NDCSeatAvailabilityTest < Test::Unit::TestCase
               Departure: {
                 AirportCode: "SXF",
                 Date: "2016-03-01",
-                Time: "06:00"
+                Time: "20:30"
               },
               Arrival: {
                 AirportCode: "MAD",
                 Date: "2016-03-01",
-                Time: "08:10",
+                Time: "23:10",
                 AirportName: "Madrid Adolfo Suárez International Airport"
               },
               MarketingCarrier: {
@@ -75,14 +75,14 @@ class NDCSeatAvailabilityTest < Test::Unit::TestCase
               _SegmentKey: "SEG2",
               Departure: {
                 AirportCode: "SXF",
-                Date: "2016-05-05",
-                Time: "09:50",
+                Date: "2016-03-01",
+                Time: "20:30",
                 AirportName: "Berlin Schönefeld"
               },
               Arrival: {
                 AirportCode: "MAD",
                 Date: "2016-05-05",
-                Time: "12:55",
+                Time: "23:10",
                 AirportName: "Madrid Adolfo Suárez International Airport"
               },
               MarketingCarrier: {
