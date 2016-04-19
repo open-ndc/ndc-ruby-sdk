@@ -13,7 +13,7 @@ class NDCFlightPriceTest < Test::Unit::TestCase
               Flight: {
                 Departure: {
                   AirportCode: 'ARN',
-                  Date: '2016-05-05',
+                  Date: '2018-05-05',
                   Time: '06:00'
                 },
                 MarketingCarrier: {
@@ -71,12 +71,12 @@ class NDCFlightPriceTest < Test::Unit::TestCase
             { Flight: [{
               Departure: {
                 AirportCode: 'ARN',
-                Date: '2016-05-05',
+                Date: '2018-05-05',
                 Time: '06:00'
               },
               Arrival: {
                 AirportCode: 'FRA',
-                Date: '2016-05-05',
+                Date: '2018-05-05',
                 Time: '08:10',
                 AirportName: 'Frankfurt International'
               },
@@ -102,12 +102,12 @@ class NDCFlightPriceTest < Test::Unit::TestCase
             { Flight: [{
               Departure: {
                 AirportCode: 'FRA',
-                Date: '2016-05-05',
+                Date: '2018-05-05',
                 Time: '09:50'
               },
               Arrival: {
                 AirportCode: 'RIX',
-                Date: '2016-05-05',
+                Date: '2018-05-05',
                 Time: '15:55',
                 AirportName: 'Riga International'
               },
@@ -195,12 +195,12 @@ class NDCFlightPriceTest < Test::Unit::TestCase
     end
 
     test "ShoppingResponseIDs is ok" do
-      refute_empty @ndc_parsed_response.hpath('FlightPriceRS/ShoppingResponseIDs')
-      refute_empty @ndc_parsed_response.hpath('FlightPriceRS/ShoppingResponseIDs/ResponseID')
+      assert @ndc_parsed_response.hpath?('FlightPriceRS/ShoppingResponseIDs')
+      assert @ndc_parsed_response.hpath?('FlightPriceRS/ShoppingResponseIDs/ResponseID')
     end
 
     test "Response includes Success element" do
-      assert @ndc_parsed_response.hpath("FlightPriceRS").has_key?(:Success)
+      assert @ndc_parsed_response.hpath?("FlightPriceRS/Success")
     end
 
   end

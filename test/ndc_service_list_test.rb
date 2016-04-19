@@ -36,7 +36,7 @@ class NDCServiceListTest < Test::Unit::TestCase
             OriginDestination: {
               Departure: {
                 AirportCode: 'SXF',
-                Date: '2016-03-01'
+                Date: '2018-12-25'
               },
               Arrival: {
                 AirportCode: 'MAD'
@@ -64,22 +64,21 @@ class NDCServiceListTest < Test::Unit::TestCase
     end
 
 
-    test "Get aServiceList response is valid" do
-      @ndc_response = @ndc_client.request(:ServiceList, valid_query_params)
+    test "Get ServiceList response is valid" do
       assert @ndc_response.valid?
     end
 
     test "MessageVersion is ok" do
-      refute_empty @ndc_parsed_response.hpath('ServiceListRS/Document')
-      assert_equal @ndc_parsed_response.hpath('ServiceListRS/Document/MessageVersion'), "15.2"
+      assert @ndc_parsed_response.hpath?('ServiceListRS/Document')
+      assert @ndc_parsed_response.hpath?('ServiceListRS/Document/MessageVersion')
     end
 
     test "Response includes Success element" do
-      assert @ndc_parsed_response.hpath("ServiceListRS").has_key?(:Success)
+      assert @ndc_parsed_response.hpath?("ServiceListRS/Success")
     end
 
     test "Response includes ServiceList listing" do
-      assert @ndc_parsed_response.hpath("ServiceListRS/DataLists").has_key?(:ServiceList)
+      assert @ndc_parsed_response.hpath?("ServiceListRS/DataLists/ServiceList")
     end
 
   end

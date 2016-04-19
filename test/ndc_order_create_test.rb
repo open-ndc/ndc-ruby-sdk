@@ -232,7 +232,7 @@ class NDCOrderCreateTest < Test::Unit::TestCase
     # end
     #
     # test "Response includes Success element" do
-    #   refute_nil @@ndc_response["OrderCreateRS"].has_key?("Success")
+    #   assert @@ndc_response.hpath?("OrderCreateRS/Success")
     # end
 
   end

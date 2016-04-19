@@ -36,7 +36,7 @@ class NDCOrderCancelTest < Test::Unit::TestCase
     # end
     #
     # test "Response includes Success element" do
-    #   refute_nil @@ndc_response["OrderCancelRS"].has_key?("Success")
+    #   assert @@ndc_response.hpath?("OrderCancelRS/Success")
     # end
 
   end
