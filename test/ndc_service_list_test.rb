@@ -36,7 +36,7 @@ class NDCServiceListTest < Test::Unit::TestCase
             OriginDestination: {
               Departure: {
                 AirportCode: 'SXF',
-                Date: '2016-03-01'
+                Date: '2018-12-25'
               },
               Arrival: {
                 AirportCode: 'MAD'

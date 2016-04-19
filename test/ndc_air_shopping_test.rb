@@ -45,7 +45,7 @@ class NDCAirShoppingTest < Test::Unit::TestCase
             OriginDestination: {
               Departure: {
                 AirportCode: 'MUC',
-                Date: '2016-04-01'
+                Date: '2018-04-01'
               },
               Arrival: {
               }
@@ -77,7 +77,7 @@ class NDCAirShoppingTest < Test::Unit::TestCase
             OriginDestination: {
               Departure: {
                 AirportCode: 'MUC',
-                Date: '2016-04-01'
+                Date: '2018-12-31'
               },
               Arrival: {
                 AirportCode: 'LHR'

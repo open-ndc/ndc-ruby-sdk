@@ -13,7 +13,7 @@ class NDCFlightPriceTest < Test::Unit::TestCase
               Flight: {
                 Departure: {
                   AirportCode: 'ARN',
-                  Date: '2016-05-05',
+                  Date: '2018-05-05',
                   Time: '06:00'
                 },
                 MarketingCarrier: {
@@ -71,12 +71,12 @@ class NDCFlightPriceTest < Test::Unit::TestCase
             { Flight: [{
               Departure: {
                 AirportCode: 'ARN',
-                Date: '2016-05-05',
+                Date: '2018-05-05',
                 Time: '06:00'
               },
               Arrival: {
                 AirportCode: 'FRA',
-                Date: '2016-05-05',
+                Date: '2018-05-05',
                 Time: '08:10',
                 AirportName: 'Frankfurt International'
               },
@@ -102,12 +102,12 @@ class NDCFlightPriceTest < Test::Unit::TestCase
             { Flight: [{
               Departure: {
                 AirportCode: 'FRA',
-                Date: '2016-05-05',
+                Date: '2018-05-05',
                 Time: '09:50'
               },
               Arrival: {
                 AirportCode: 'RIX',
-                Date: '2016-05-05',
+                Date: '2018-05-05',
                 Time: '15:55',
                 AirportName: 'Riga International'
               },

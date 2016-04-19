@@ -12,7 +12,7 @@ class NDCServicePriceTest < Test::Unit::TestCase
             OriginDestination: {
               Departure: {
                 AirportCode: 'SXF',
-                Date: '2016-03-01'
+                Date: '2018-12-25'
               },
               Arrival: {
                 AirportCode: 'MAD'
@@ -40,7 +40,6 @@ class NDCServicePriceTest < Test::Unit::TestCase
     end
 
     test "ServicePrice response is valid" do
-      # @ndc_response = @ndc_client.request(:ServicePrice, valid_query_params)
       assert @ndc_response.valid?
     end
 
